@@ -1,0 +1,400 @@
+\documentclass[compress,red]{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage{ucs}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage[russian]{babel}
+\usepackage{graphicx}
+\usepackage{wrapfig}
+
+\usepackage{tikz}
+\usepackage{verbatim}
+
+\usepackage{color}
+\usepackage{xcolor}
+\usepackage{listings}
+
+\usepackage{caption}
+\DeclareCaptionFont{white}{\color{white}}
+\DeclareCaptionFormat{listing}{\colorbox{gray}{\parbox{\textwidth}{#1#2#3}}}
+\captionsetup[lstlisting]{format=listing,labelfont=white,textfont=white}
+
+\usetikzlibrary{calc,trees,positioning,arrows,chains,shapes.geometric,%
+    decorations.pathreplacing,decorations.pathmorphing,shapes,%
+    matrix,shapes.symbols}
+
+\tikzset{
+>=stealth',
+  punktchain/.style={
+    rectangle, 
+    rounded corners, 
+    % fill=black!10,
+    draw=black, very thick,
+    text width=10em, 
+    minimum height=3em, 
+    text centered, 
+    on chain},
+  line/.style={draw, thick, <-},
+  element/.style={
+    tape,
+    top color=white,
+    bottom color=blue!50!black!60!,
+    minimum width=8em,
+    draw=blue!40!black!90, very thick,
+    text width=10em, 
+    minimum height=1.5em, 
+    text centered, 
+    on chain},
+  every join/.style={->, thick,shorten <=1pt},
+  decoration={brace},
+  tuborg/.style={decorate},
+  tubnode/.style={midway, right=2pt},
+}
+
+\mode<presentation>
+
+\usetheme{Warsaw}
+
+\definecolor{Red}{rgb}{1,0,0}
+\definecolor{Blue}{rgb}{0,0,1}
+\definecolor{Green}{rgb}{0,1,0}
+\definecolor{magenta}{rgb}{1,0,.6}
+\definecolor{lightblue}{rgb}{0,.5,1}
+\definecolor{lightpurple}{rgb}{.6,.4,1}
+\definecolor{gold}{rgb}{.6,.5,0}
+\definecolor{orange}{rgb}{1,0.4,0}
+\definecolor{hotpink}{rgb}{1,0,0.5}
+\definecolor{newcolor2}{rgb}{.5,.3,.5}
+\definecolor{newcolor}{rgb}{0,.3,1}
+\definecolor{newcolor3}{rgb}{1,0,.35}
+\definecolor{darkgreen1}{rgb}{0, .35, 0}
+\definecolor{darkgreen}{rgb}{0, .6, 0}
+\definecolor{darkred}{rgb}{.75,0,0}
+
+\xdefinecolor{olive}{cmyk}{0.64,0,0.95,0.4}
+\xdefinecolor{purpleish}{cmyk}{0.75,0.75,0,0}
+
+\useoutertheme[subsection=false]{smoothbars}
+
+
+\title{Ruby: массивы}
+\author{Информатика \\ 10-11 классы}
+
+%\usecolortheme{dolphin}
+
+
+\begin{document}
+%%титульная страница
+\maketitle
+%% основные моменты
+
+\section{Базовые сведения}
+
+\subsection{Введение}
+\begin{frame}
+  \frametitle{Введение}
+  \begin{itemize}
+    \item Одним из базовых типов переменных является \emph{массив}. Ранее мы рассматривали переменные типа число (integer, float), немного строки (string).
+    \item (Формально): Массив --- ряд переменных, доступ к которым определён по индексу.
+    \item (Упрощённо): Массив --- группа переменных, пронумеранных начиная с нуля, хранящихся в единой переменной.
+    \item Массивы позволяют упростить доступ к однотипным данным.
+    \item Например, в виде массива легко хранить температуру за 30 последних дней.
+    \item Массивы бывают двумерными --- когда элементы массива сами являются массивами.
+  \end{itemize}
+\end{frame}
+
+\subsection{Введение}
+\begin{frame}[fragile]
+  \frametitle{Табличная форма}
+  \begin{columns}[lc]
+  \column{1.0in}
+    \begin{tabular}{|c|c|}
+    \hline
+    Ключ & Значение\\
+    \hline
+    0 & 5.3\\
+    \hline
+    1 & 4.2\\
+    \hline
+    2 & 2.0\\
+    \hline
+    3 & -0.8\\
+    \hline
+    4 & 1.5\\
+    \hline
+    \end{tabular}
+    
+  \column{2.8in}
+    \begin{itemize}
+      \item Рассмотрим массив, состоящий из 5 элементов (см. таблицу слева)
+      \item В ruby такой массив записывается следующим образом:
+    \end{itemize}
+      \begin{lstlisting}[language=ruby,basicstyle=\footnotesize,label=ruby1,caption=Создание массива]
+        arr = [5.3, 4.2, 2.0, -0.8, 1.5]
+      \end{lstlisting}
+    \begin{itemize}
+      \item где \rm{arr} --- название массива.
+      \item Чтобы вывести на экран, например, элемент с ключом 3 достаточно написать \textbf{puts arr[3]}:
+    \end{itemize}
+  \end{columns}
+\end{frame}
+
+\subsection{Создание массива}
+\begin{frame}[fragile]
+  \frametitle{Создание массива}
+  
+  \begin{itemize}
+    \item Зададим массив, состоящий из 6 последовательных натуральных чисел.
+  \end{itemize}
+    \begin{lstlisting}[language=ruby,basicstyle=\footnotesize,label=ruby2,caption=Способы создания массива]
+    arr = [1,2,3,4,5,6]
+    
+    arr = Array.new
+    arr[0] = 1
+    arr[1] = 2
+    arr[]  = 3
+    ...
+    
+    arr = (1..6).to_a
+    \end{lstlisting}
+
+  \begin{itemize}
+    \item 1 способ --- обычный, 2 --- ручной (обратите внимание, что ключ при добавлении элемента в конец указывать необязательно), 3 --- через диапазон.
+  \end{itemize}
+  
+\end{frame}
+
+\section{Методы}
+\subsection{Методы}
+\begin{frame}[fragile]
+  \frametitle{Методы}
+  
+  \begin{itemize}
+    \item Чтобы изменить массив, к нему нужно применить так называемый \emph{метод}.
+    \item \emph{Метод} --- это то, что меняет переменную по заданному правилу.
+    \item Например, метод \textbf{sort} сортирует массив.
+    \item Для разных типов переменных могут быть разные методы.
+    \item Чтобы применить к переменной \textbf{var} метод \textbf{method} достаточно написать:
+  \end{itemize}
+  \begin{lstlisting}[language=ruby,basicstyle=\footnotesize,label=ruby3,caption=Применение метода]
+    var.method
+  \end{lstlisting}
+  \begin{itemize}
+    \item Обратите внимание! Обычный метод не меняет саму переменную. Хотите изменить --- присвойте результат другой переменной или этой же самой (var = var.method)
+  \end{itemize}
+  
+\end{frame}
+
+\subsection{Базовые методы}
+\begin{frame}[fragile]
+  \frametitle{Методы работы с массивом}
+		\begin{itemize}
+  	  \item Рассмотрим массив arr = [6,3,5,1,2,4].
+		\end{itemize}
+		
+		\begin{tabular}{|l|l|c|}
+		\hline
+		\centering{\textbf{Метод}} & \centering{\textbf{Описание}} & \textbf{Результат}\\
+		\hline
+		arr.size & количество элементов & 6 \\
+		\hline
+		arr.min & минимальный элемент & 1 \\
+		\hline
+		arr.max & максимальный элемент & 6 \\
+		\hline
+		arr.sort & сортировка & [1,2,3,4,5,6] \\
+		\hline
+		arr.reverse & перевернуть & [4,2,1,5,3,6] \\
+		\hline
+		arr.sort.reverse & отсортировать и перевернуть & [6,5,4,3,2,1] \\
+		\hline
+		arr.include?(6) & есть ли в массиве элемент 6 & true \\
+		\hline
+		arr.empty? & пуст ли массив & false \\
+		\hline
+		arr.any? & есть ли хоть один элемент & true \\
+		\hline
+		arr.delete(6) & удалить элемент 6* & [3,5,1,2,4] \\
+		\hline
+		arr.delete\_at(1) & удалить элемент с ключом 1 & [6,5,1,2,4] \\
+		\hline
+		\end{tabular}
+		
+\end{frame}
+
+\section{Задачи}
+
+\subsection{Сумма}
+\begin{frame}[fragile]
+  \frametitle{Сумма}
+		\begin{itemize}
+  		\item Допустим дана средняя температура за 5 дней: arr = [5.3, 2.1, 5.2, 1.8, -0.2].
+  		\item Как вычислить сумму?
+  	\end{itemize}
+  	\scriptsize{
+  		\begin{lstlisting}[language=ruby,basicstyle=\footnotesize,label=ruby5,caption=Сумма]
+  		  arr = [5.3, 2.1, 5.2, 1.8, -0.2]
+  		  sum = arr.inject(0){ |res, elem| res+elem }
+      \end{lstlisting}}
+  	
+  	\begin{figure}
+    \centering
+    \begin{tikzpicture}[node distance=2.0em]
+    \tikzset{
+        every node/.style={scale=0.7},
+        action/.style={rectangle,draw=black, top color=white, bottom color=yellow!50,thin, inner sep=0.25em, minimum size=0.6em, text centered},
+        input/.style={ellipse,draw=black, top color=white, bottom color=yellow!50,thin, inner sep=0.25em, minimum size=0.6em, text centered},
+        condition/.style={diamond,draw=black, top color=white, bottom color=yellow!50,thin, inner sep=0.25em, minimum size=0.6em, text centered},
+        block/.style={chamfered rectangle,draw=black, top color=white, bottom color=yellow!50,thin, inner sep=0.25em, minimum size=0.6em, text centered},
+        myarrow/.style={draw},
+    }
+    
+    \node[action] (AuxNode01) {res=0};
+    \node[block, below=1.0em of AuxNode01] (item1) {по всем элементам массива};
+    \node[action, below right=1.0em of item1] (item2) {res=res+elem};
+    \node (AuxNode02) [text width=0em, below=1.0em of item2] {};
+    \node (AuxNode03) [text width=0em, left=5.5em of AuxNode02] {};
+    \node (AuxNode04) [text width=0em, left=7.0em of AuxNode03] {};
+    \node (AuxNode05) [text width=0em, left=1.2em of item1] {};
+    \node (AuxNode06) [text width=0em, below=1.0em of AuxNode03] {};
+
+    \path[myarrow] (AuxNode01.south) -- (item1.north);   
+    \path[myarrow] (item1.east) -| (item2.north);   
+    \path[myarrow] (item2.south) -- (AuxNode02.center);   
+    \path[myarrow] (AuxNode02.center) -- (AuxNode03.center);   
+    \path[myarrow] (AuxNode03.center) -- (AuxNode04.center);   
+    \path[myarrow] (AuxNode04.center) -- (AuxNode05.center);   
+    \path[myarrow] (AuxNode05.center) -- (item1.west);   
+    \path[myarrow] (AuxNode03.center) -- (AuxNode06.center);   
+
+    \end{tikzpicture} 
+    \end{figure}
+\end{frame}
+
+\subsection{Inject}
+\begin{frame}[fragile]
+  \frametitle{Разбор метода inject}
+
+  \begin{lstlisting}[language=ruby,basicstyle=\footnotesize,label=ruby6,caption=Общий вид inject]
+    res = arr.inject(start){|result, element| expression }
+  \end{lstlisting}
+  
+  \begin{itemize}
+    \item start --- чему изначально равна переменная result. Например, если внутри inject вы будете умножать, то нельзя делать переменную равной нулю, так как ноль умножить на любое число --- ноль.
+    \item result --- переменная, в которую записывается результат.
+    \item element --- текущий элемент массива (переменная меняется с каждой итерацией).
+    \item expression --- выражение для переменных result и element.
+    \item \textbf{Обратите внимание!} На этом слайде названия переменных и выражение даны в виде схемы! Реальный пример --- на предыдущем слайде.
+  \end{itemize}
+  
+\end{frame}
+
+\subsection{Задания}
+\begin{frame}
+  \frametitle{Задания}
+  \begin{itemize}
+    \item Напишите программу, вычисляющую с помощью inject произведение элементов массива (массив можно задать любой).
+    \item Напишите программу, вычисляющую среднее арифметическое и среднее геометрическое элементов массива.
+  \end{itemize}
+\end{frame}
+
+\subsection{Поиск}
+\begin{frame}[fragile]
+  \frametitle{Поиск элементов}
+
+  \begin{itemize}
+    \item В ряде задач нам нужно извлечь из массива определённые элементы.
+		\item Допустим дана средняя температура за 5 дней: arr = [5.3, 2.1, 1.2, -0.8, -0.2].
+    \item Вычислим, сколько дней была отрицательная температура.
+  \end{itemize}
+
+  \begin{lstlisting}[language=ruby,basicstyle=\footnotesize,label=ruby7,caption=Метод find\_all]
+    arr  = [5.3, 2.1, 1.2, -0.8, -0.2]
+    arr_neg = arr.find_all{|elem| (elem < 0) }
+    puts arr_neg.size
+    
+    puts [5.3, 2.1, 1.2, -0.8, -0.2].
+         find_all{|elem| (elem > 0) }.size
+  \end{lstlisting}
+  
+\end{frame}
+
+\subsection{Разбор метода find}
+\begin{frame}[fragile]
+  \frametitle{Разбор метода find\_all}
+  
+  \begin{lstlisting}[language=ruby,basicstyle=\footnotesize,label=ruby8,caption=Общий вид find\_all]
+    arr_res = arr.find_all{ |element| condition }
+  \end{lstlisting}
+  
+  \begin{itemize}
+    \item element --- текущий (рассматриваемый) элемент массива (переменная меняется с каждой итерацией).
+    \item condition --- логическое выражение или несколько выражений, связанных логическими операциями (конъюнкция, дизъюнкция, отрицание).
+    \item Метод извлекает из массива \textbf{arr} все элементы, удовлетворяющие условию \textbf{condition}, и записывает результат в массив \textbf{arr\_res}.
+  \end{itemize}
+  
+\end{frame}
+
+\subsection{Задания}
+\begin{frame}
+  \frametitle{Задания}
+  \begin{itemize}
+    \item Дан массив из 10 целых чисел (любых). Вывести на экран все элементы массива, меньшие нуля и делящиеся на три.
+    \item Дан массив из 10 целых чисел (любых). Вывести на экран сумму все чётных положительных элементов массива.
+  \end{itemize}
+\end{frame}
+
+\subsection{map}
+\begin{frame}[fragile]
+  \frametitle{Изменение элементов массива}
+
+  \begin{itemize}
+    \item Предположим, у нас есть массив цен на нефть в долларах США за последние 5 дней.
+    \item Как перевести все цены в рубли, зная курс рубля по отношению к доллару?
+  \end{itemize}
+
+  \begin{lstlisting}[language=ruby,basicstyle=\footnotesize,label=ruby9,caption=Метод map]
+    arr  = [99.23, 101.42, 99.87, 96.49, 95.11]
+    usd_to_rub = 31.23
+    arr_in_rub = arr.map{|elem| elem*usd_to_rub}
+    puts arr_in_rub
+  \end{lstlisting}
+  
+\end{frame}
+
+\subsection{Разбор метода map}
+\begin{frame}[fragile]
+  \frametitle{Разбор метода map}
+  
+  \begin{lstlisting}[language=ruby,basicstyle=\footnotesize,label=ruby10,caption=Общий вид map]
+    arr_res = arr.map{|element| expression }
+  \end{lstlisting}
+  
+  \begin{itemize}
+    \item element --- текущий (рассматриваемый) элемент массива (переменная меняется с каждой итерацией).
+    \item expression --- выражение, показывающее, как надо менять элемент массива.
+    \item Метод проходит по всему массиву \textbf{arr} и меняет каждый элемент в соответствии с выражением \textbf{expression}. Результат записывается в массив \textbf{arr\_res}.
+  \end{itemize}
+  
+\end{frame}
+
+\subsection{Задания}
+\begin{frame}
+  \frametitle{Задания}
+  \begin{itemize}
+    \item Дан массив температуры за последние 10 дней (любые разумные числа) в градусах по Цельсию. Вывести на экран температуру на каждый день в градусах по Фаренгейту и по Кельвину.
+  \end{itemize}
+\end{frame}
+
+\section{References}
+\subsection{References}
+\begin{frame}[fragile]
+  \frametitle{References}
+  \begin{itemize}
+    \item Все презентации доступны на http://school.smirik.ru!
+    \item Вопросы, предложения, д/з: smirik@gmail.com
+  \end{itemize}
+\end{frame}
+
+\end{document}

@@ -1,0 +1,13 @@
+*.mp4
+*.mov
+*.m4v
+*.aux
+*.log
+*.nav
+*.snm
+*.toc
+*.gz
+*.out
+*.vrb
+*.srt
+.DS_Store

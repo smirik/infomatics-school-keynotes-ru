@@ -1,0 +1,315 @@
+\documentclass[compress,red]{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage{ucs}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage[russian]{babel}
+\usepackage{graphicx}
+\usepackage{wrapfig}
+
+\usepackage{tikz}
+\usepackage{verbatim}
+
+\usepackage{color}
+\usepackage{xcolor}
+\usepackage{listings}
+
+\lstset{
+language=ruby,
+extendedchars=\true,
+inputencoding=utf8x,
+commentstyle=\itshape,
+stringstyle=\bf,
+belowcaptionskip=5pt }
+
+\usepackage{caption}
+\DeclareCaptionFont{white}{\color{white}}
+\DeclareCaptionFormat{listing}{\colorbox{gray}{\parbox{\textwidth}{#1#2#3}}}
+\captionsetup[lstlisting]{format=listing,labelfont=white,textfont=white}
+
+\usetikzlibrary{calc,trees,positioning,arrows,chains,shapes.geometric,%
+    decorations.pathreplacing,decorations.pathmorphing,shapes,%
+    matrix,shapes.symbols}
+
+\tikzset{
+>=stealth',
+  punktchain/.style={
+    rectangle, 
+    rounded corners, 
+    % fill=black!10,
+    draw=black, very thick,
+    text width=10em, 
+    minimum height=3em, 
+    text centered, 
+    on chain},
+  line/.style={draw, thick, <-},
+  element/.style={
+    tape,
+    top color=white,
+    bottom color=blue!50!black!60!,
+    minimum width=8em,
+    draw=blue!40!black!90, very thick,
+    text width=10em, 
+    minimum height=1.5em, 
+    text centered, 
+    on chain},
+  every join/.style={->, thick,shorten <=1pt},
+  decoration={brace},
+  tuborg/.style={decorate},
+  tubnode/.style={midway, right=2pt},
+}
+
+\mode<presentation>
+
+\usetheme{Warsaw}
+
+\definecolor{Red}{rgb}{1,0,0}
+\definecolor{Blue}{rgb}{0,0,1}
+\definecolor{Green}{rgb}{0,1,0}
+\definecolor{magenta}{rgb}{1,0,.6}
+\definecolor{lightblue}{rgb}{0,.5,1}
+\definecolor{lightpurple}{rgb}{.6,.4,1}
+\definecolor{gold}{rgb}{.6,.5,0}
+\definecolor{orange}{rgb}{1,0.4,0}
+\definecolor{hotpink}{rgb}{1,0,0.5}
+\definecolor{newcolor2}{rgb}{.5,.3,.5}
+\definecolor{newcolor}{rgb}{0,.3,1}
+\definecolor{newcolor3}{rgb}{1,0,.35}
+\definecolor{darkgreen1}{rgb}{0, .35, 0}
+\definecolor{darkgreen}{rgb}{0, .6, 0}
+\definecolor{darkred}{rgb}{.75,0,0}
+
+\xdefinecolor{olive}{cmyk}{0.64,0,0.95,0.4}
+\xdefinecolor{purpleish}{cmyk}{0.75,0.75,0,0}
+
+\useoutertheme[subsection=false]{smoothbars}
+
+
+\title{Ruby: строки}
+\author{Информатика \\ 10-11 классы}
+
+%\usecolortheme{dolphin}
+
+
+\begin{document}
+%%титульная страница
+\maketitle
+%% основные моменты
+
+\section{Строки}
+
+\subsection{Строки}
+\begin{frame}
+  \frametitle{Строки}
+  \begin{itemize}
+    \item Строки --- наиболее популярный тип в любом языке программирования.
+    \item При вводе / выводе информации любой тип данных преобразуется в строку.
+    \item Имя, фамилия, условие задачи и даже программа --- всё это строки.
+    \item Строки очень похожи на массивы. Строка суть набор букв, то есть, массив.
+    \item Поэтому работа со строками столь же проста в ruby, как и с массивами.
+  \end{itemize}
+\end{frame}
+
+\subsection{Пример}
+\begin{frame}
+  \frametitle{История о возможностях ruby}
+  \begin{itemize}
+    \item Студенты четвёртого курса МЭТТ ГАИ поступили на подготовительные курсы в МГИУ. Там им начали преподавать основы программирования на Ruby. 
+    \item И одна из заданных им задач была: ``Дано число, необходимо поменять порядок цифр на обратный''. 
+    \item Задача сложная, но наши студенты об этом не знали и решили её преобразованием к строке: $\rm{given.to\_s.reverse}$. 
+    \item Преподаватели были поражены и впредь запретили им использовать преобразования к строке в своих программах.
+    \item И всё потому, что это сильно упрощало решение и давало студентам огромное преимущество перед остальными слушателями курсов. (ВикиУчебник)
+  \end{itemize}
+\end{frame}
+
+\subsection{Ruby - это просто}
+\begin{frame}[fragile]
+  \frametitle{Ruby --- это просто}
+  \centerline{\includegraphics[width=0.8\textwidth]{images/difficulty.jpg}}
+\end{frame}
+
+\section{Создание и базовые операции}
+\subsection{Создание строк}
+\begin{frame}[fragile]
+  \frametitle{Создание строк}
+  \begin{itemize}
+    \item Простейший способ задания строки --- через кавычки ".
+    \item Можно преобразовать число к строке с помощью $\rm{to\_s}$.
+    \item В строках можно выводить значение переменных с помощью конструкции $#{var}$
+  \end{itemize}
+  
+    \begin{lstlisting}[language=ruby,basicstyle=\footnotesize,label=ruby1,caption=Способы создания строки]
+      name = "Ivan Ivanov"
+      age  = 56.to_s
+      var  = 35
+      puts "var = #{var}" 
+    \end{lstlisting}
+  
+\end{frame}
+
+\subsection{Создание строк}
+\begin{frame}[fragile]
+  \frametitle{Конкатенация (сложение строк)}
+  \begin{itemize}
+    \item Строки можно складывать. Следующая программа выведет на экран строку ``Help us Obi Wan Kenobi'':
+  \end{itemize}
+    \begin{lstlisting}[language=ruby,basicstyle=\footnotesize,label=ruby2,caption=Конкатенация строк]
+      help = "Help us"
+      puts help + " Obi Wan Kenobi"
+    \end{lstlisting}
+  \begin{itemize}
+    \item Строки можно умножать на целые числа. Пример ниже выведет строку ``axaxaxax'':
+  \end{itemize}
+  \begin{lstlisting}[language=ruby,basicstyle=\footnotesize,label=ruby3,caption=Умножение строк]
+    puts "ax"*4
+  \end{lstlisting}
+  
+\end{frame}
+
+\section{Методы}
+\subsection{Базовые методы}
+\begin{frame}[fragile]
+  \frametitle{Методы работы со строками}
+		\begin{itemize}
+  	  \item s = ``Во дворе - дрова, а в дровах - трава!''.
+		\end{itemize}
+		\begin{tabular}{|p{8em}|p{19em}|}
+		\hline
+		\textbf{Метод} & \textbf{Описание (результат)} \\
+		\hline
+		$\rm{s.size}$ & количество символов (33) \\
+		\hline
+		$\rm{s[3]}$ & четвёртый (с учётом нулевого) символ (д) \\
+		\hline
+		$\rm{s[-1]}$ & последний символ (в обратную сторону) (!) \\
+		\hline
+		$\rm{s[3..7]}$ & символы с 3-го по 7-й (дворе)\\
+		\hline
+		$\rm{s[3..7].reverse}$ & перевернуть (еровд) \\
+		\hline
+		\scriptsize{$\rm{s.sub}$(``трава'', ``мясо'')} & заменить одно слово ``трава'' на слово ``мясо''\\
+		\hline
+		$\rm{s.gsub}$(``а'', ``о'')} & заменить все ``а'' на ``о''\\
+		\hline
+		$\rm{s.split}$(``слово'') & разделить строку по слову (вернёт массив подстрок) \\
+		\hline
+		\end{tabular}
+		
+\end{frame}
+
+\subsection{Задача}
+\begin{frame}[fragile]
+  \frametitle{Подсчёт количества слов}
+		\begin{itemize}
+  		\item Решим простую задачу о подсчёте количества слов в строке.
+  		\item Известно, что слова отделяются пробелами.
+  		\item Поэтому разобьём строку по пробелам и подсчитаем количество получившихся \emph{подстрок}.
+  	\end{itemize}
+  	\scriptsize{
+  		\begin{lstlisting}[language=ruby,basicstyle=\footnotesize,label=ruby4,caption=Слова]
+  		  s = "All your bases are belong to us!"
+  		  substrings_array = s.split(" ")
+  		  puts substrings_array.size
+      \end{lstlisting}}
+\end{frame}
+
+\subsection{Задача}
+\begin{frame}[fragile]
+  \frametitle{Жи-ши пиши с И}
+		\begin{itemize}
+  		\item Напишем программу, исправляющую некоторые ошибки в написании.
+  		\item Правила будут следующие: ``жи--ши пиши с \textbf{и}, ча-ща пиши с \textbf{а}''.
+  		\item Для замены воспользуемся методом gsub.
+  	\end{itemize}
+  	\scriptsize{
+  		\begin{lstlisting}[language=ruby,basicstyle=\footnotesize,label=ruby5,caption=Правила]
+  		  s = "Начяльника, моя жыть хочет, дай денег на чяй!"
+  		  correct_s = s.gsub("жы", "жи").gsub("шы", "ши")
+  		               .gsub("чя", "ча").gsub("щя", "ща")
+  		  puts correct_s
+      \end{lstlisting}}
+\end{frame}
+
+\subsection{Метод each}
+\begin{frame}[fragile]
+  \frametitle{Метод each}
+		\begin{itemize}
+		  \item Для прохода по массивам / строкам помимо уже изученных методов есть ещё несколько весьма полезных.
+		  \item Метод each позволяет пройтись по каждому элементу массива и выполнить какое--либо действие.
+		  \item По принципу он очень похож на методы map, inject и др.
+		  \item Посчитаем длину каждого слова в строке.
+		  \item Для этого разобьём строку на слова (в виде массива), а затем пройдёмся по массиву и посчитаем длину каждого слова.
+    \end{itemize}
+    
+\end{frame}
+
+\section{Задачи}
+
+\subsection{Метод each}
+\begin{frame}[fragile]
+  
+  \frametitle{Метод each}
+  \scriptsize{
+		\begin{lstlisting}[language=ruby,basicstyle=\footnotesize,label=ruby6,caption=Метод each --- краткая запись]
+		  s = "This is SPARTA!"
+		  s_arr = s.split(" ")
+		  s_arr.each { |elem| puts elem.size }
+	\end{lstlisting}
+	}
+  \scriptsize{
+		\begin{lstlisting}[language=ruby,basicstyle=\footnotesize,label=ruby7,caption=Метод each --- полная запись]
+		  s = "This is SPARTA!"
+		  s_arr = s.split(" ")
+		  s_arr.each do |elem|
+		    puts elem.size
+		  end
+	\end{lstlisting}
+	}
+
+\end{frame}
+
+\subsection{Методы}
+\begin{frame}[fragile]
+  \frametitle{Ещё несколько полезных методов}
+
+  \begin{itemize}
+    \item s.trim --- убирает лишние пробелы в начале и в конце строки.
+    \item s.empty? --- проверяет, пуста ли строка.
+    \item s.include?($\rm{other\_s}$) --- содержит ли строка подстроку $\rm{other\_s}$.
+    \item Продвинутые методы:
+    \item $\rm{s.each}$ do |char| --- проходит по всем символам строки.
+    \item $\rm{s.each\_line}$ do |line| --- проходит по всем строкам текста.
+    \item s[1].chr --- номер ASCII--символа.
+    \item 97.ord --- перевод из ASCII--кода в символ.
+    \item  \textbackslash n --- символ перевода строки (`` \textbackslash r\textbackslash n'' в Windows).
+  \end{itemize}
+  
+\end{frame}
+
+\subsection{Задания}
+\begin{frame}
+  \frametitle{Задания}
+  \begin{itemize}
+    \item Напишите программу, выводящую на экран среднюю длину слова в заданной строке (ответ представить в виде целой части получившегося числа).
+    \item Напишите программу, выводящую на экран слова, чья длина превышает среднюю. В конце программы укажите число таких слов.
+    \item (Повышенной сложности) \emph{Палиндромом} называют слово (или буквосочетание), одинаково читающееся в обоих направлениях: топот, \emph{А роза упала на лапу Азора} (Фет). Задача: вывести на экран все палиндромы--слова, встречающиеся в строке.
+    \item (МегаПовышенной сложности) Вывести на экран все палиндромы (включая словосочетания), встречающиеся в строке.
+  \end{itemize}
+\end{frame}
+
+\section{References}
+\subsection{References}
+\begin{frame}[fragile]
+  \frametitle{References}
+  \begin{itemize}
+    \item Все презентации доступны на http://school.smirik.ru!
+    \item Вопросы, предложения, д/з: smirik@gmail.com
+    \item Благодарности: ВикиУчебник, Википедия, Гугол, мозг.
+  \end{itemize}
+\end{frame}
+
+
+
+
+\end{document}
