@@ -1,0 +1,425 @@
+\documentclass[compress,red]{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage{ucs}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage[russian]{babel}
+\usepackage{graphicx}
+\usepackage{wrapfig}
+
+\usepackage{tikz}
+\usepackage{verbatim}
+
+\usepackage{color}
+\usepackage{xcolor}
+\usepackage{listings}
+
+\usepackage{caption}
+
+\lstset{
+language=ruby,
+extendedchars=\true,
+inputencoding=utf8x,
+commentstyle=\itshape,
+stringstyle=\bf,
+belowcaptionskip=5pt }
+
+
+\DeclareCaptionFont{white}{\color{white}}
+\DeclareCaptionFormat{listing}{\colorbox{gray}{\parbox{\textwidth}{#1#2#3}}}
+\captionsetup[lstlisting]{format=listing,labelfont=white,textfont=white}
+
+\usetikzlibrary{calc,trees,positioning,arrows,chains,shapes.geometric,%
+    decorations.pathreplacing,decorations.pathmorphing,shapes,%
+    matrix,shapes.symbols}
+
+\tikzset{
+>=stealth',
+  punktchain/.style={
+    rectangle, 
+    rounded corners, 
+    % fill=black!10,
+    draw=black, very thick,
+    text width=10em, 
+    minimum height=3em, 
+    text centered, 
+    on chain},
+  line/.style={draw, thick, <-},
+  element/.style={
+    tape,
+    top color=white,
+    bottom color=blue!50!black!60!,
+    minimum width=8em,
+    draw=blue!40!black!90, very thick,
+    text width=10em, 
+    minimum height=1.5em, 
+    text centered, 
+    on chain},
+  every join/.style={->, thick,shorten <=1pt},
+  decoration={brace},
+  tuborg/.style={decorate},
+  tubnode/.style={midway, right=2pt},
+}
+
+\mode<presentation>
+
+\usetheme{Warsaw}
+
+\definecolor{Red}{rgb}{1,0,0}
+\definecolor{Blue}{rgb}{0,0,1}
+\definecolor{Green}{rgb}{0,1,0}
+\definecolor{magenta}{rgb}{1,0,.6}
+\definecolor{lightblue}{rgb}{0,.5,1}
+\definecolor{lightpurple}{rgb}{.6,.4,1}
+\definecolor{gold}{rgb}{.6,.5,0}
+\definecolor{orange}{rgb}{1,0.4,0}
+\definecolor{hotpink}{rgb}{1,0,0.5}
+\definecolor{newcolor2}{rgb}{.5,.3,.5}
+\definecolor{newcolor}{rgb}{0,.3,1}
+\definecolor{newcolor3}{rgb}{1,0,.35}
+\definecolor{darkgreen1}{rgb}{0, .35, 0}
+\definecolor{darkgreen}{rgb}{0, .6, 0}
+\definecolor{darkred}{rgb}{.75,0,0}
+
+\xdefinecolor{olive}{cmyk}{0.64,0,0.95,0.4}
+\xdefinecolor{purpleish}{cmyk}{0.75,0.75,0,0}
+
+\useoutertheme[subsection=false]{smoothbars}
+
+\title{Паттерны программирования}
+\author{Информатика \\ 10-11 классы}
+
+%\usecolortheme{dolphin}
+
+
+\begin{document}
+%%титульная страница
+\maketitle
+%% основные моменты
+
+\section{Введение}
+\subsection{Введение}
+\begin{frame}[fragile]
+\frametitle{Паттерны программирования}
+		\begin{itemize}
+		\item Одним из отличительных свойств хорошего программиста является умение решать стандартные задачи стандартными методами.
+		\item Практически любая задача в своём итоге сводится к нескольким проблемам:
+		  \begin{enumerate}
+				\item Считать исходные данные.
+				\item Придумать способ хранения данных внутри программы.
+				\item Понять, как проще всего разбить на подзадачи.
+				\item Проверить, нет ли готовых решений?
+				\item Преобразовать получившийся результат к требуемому.
+		  \end{enumerate}
+		\end{itemize}
+\end{frame}
+
+\section{Простые паттерны}
+\subsection{Паттерн 1}
+\begin{frame}
+	\begin{center}
+		\Huge{Паттерн 1}
+	\end{center}
+	\begin{center}
+		\Large{Запомнить нужное значение}
+	\end{center}
+\end{frame}
+
+\subsection{Паттерн 1, условие}
+\begin{frame}[fragile]
+\frametitle{Запомнить нужное значение}
+		\begin{itemize}
+			\item Часто в задаче требуется найти какую-то величину.
+			\item К примеру, задача: найти наибольший элемент массива.
+			\item Конечно, можно и нужно воспользоваться методом \emph{max}, однако попробуем решить эту задачу без читов.
+			\item В данном случае нам нужно найти максимальный элемент.
+			\item Если что-то надо найти, нужна переменная, куда мы будем записывать значение найденного.
+			\item В данной задаче назовём её \emph{max}.
+		\end{itemize}
+\end{frame}
+
+\subsection{Паттерн 1, часть 2}
+\begin{frame}[fragile]
+\frametitle{Алгоритм для паттерна 1}
+	\begin{enumerate}
+		\item Пройтись по всему массиву и рассмотрим последовательно каждый его элемент.
+		\item В переменную \emph{max} будем записывать максимальный элемент \textbf{на текущий момент}.
+		\item Если вдруг очередной элемент массива больше текущего максимального \emph{max}, запишем его значение в переменную \emph{max}.
+		\item Единственно, возникает вопрос: а какое число изначально записать в \emph{max}?
+		\item Если мы сделаем $max = 0$, то программа будет неверно работать для массивов, состоящих из отрицательных чисел.
+	\end{enumerate}
+\end{frame}
+
+\subsection{Правило 1}
+\begin{frame}
+	\begin{center}
+		\Huge{Правило 1}
+	\end{center}
+	\begin{center}
+		\Large{Думайте, всегда ли программа будет работать правильно. Из-за ``забытых'' случаев падают космические корабли. }
+	\end{center}
+\end{frame}
+
+\subsection{Паттерн 1, часть 3}
+\begin{frame}[fragile]
+\frametitle{Алгоритм для паттерна 1}
+	\begin{itemize}
+		\item \textbf{Решение}: очевидно, что максимальный элемент массива больше либо равен нулевого элемента (так как он --- максимальный).
+		\item Поэтому если массив не пуст, то в качестве \emph{значения по умолчанию} можно взять именно его.
+	\end{itemize}
+		\scriptsize{
+	  \begin{lstlisting}[label=ruby1,language=Ruby,caption=Паттерн 1]
+			def max(array)
+				 	return false if array.empty?
+				 	max = array[0]
+				 	for i in 0..array.size-1
+				 	 	max = array[i] if (array[i] > max)
+				 	end
+				 	max
+			end
+	  \end{lstlisting}
+		}
+\end{frame}
+
+\subsection{Паттерн 1, часть 4}
+\begin{frame}[fragile]
+\frametitle{Улучшения паттерна 1}
+	\begin{itemize}
+		\item Заметим, что при каждой итерации цикла нам приходится вычислять значение длины массива \emph{array.size}.
+		\item Конечно, современные языки умеют \emph{кэшировать} такие операции, но лучше не полагаться на это.
+		\item \textbf{Задача}. Как сделать так, чтобы не вычислять длину массива на каждом шаге?
+		\item Вычислить её единожды! А результат записать в дополнительную переменную!
+		\item Да, кстати: почему \emph{array.size-1}. Откуда взялась --1?
+		\item Массивы в ruby нумеруются с нуля. Поэтому для массива, состоящего из $n$ элементов, ключ последнего будет равен $n-1$.
+	\end{itemize}
+\end{frame}
+
+\subsection{Паттерн 1, часть 5}
+\begin{frame}[fragile]
+\frametitle{Улучшения для паттерна 1}
+		\scriptsize{
+	  \begin{lstlisting}[label=ruby2,language=Ruby,caption=Паттерн 1]
+			def max(array)
+				 	return false if array.empty?
+				 	max = array[0]
+				 	size = array.size-1
+				 	for i in 0..size
+				 	 	max = array[i] if (array[i] > max)
+				 	end
+				 	max
+			end
+	  \end{lstlisting}
+		}
+\end{frame}
+
+\section{Паттерн 2}
+
+\subsection{Паттерн 2}
+\begin{frame}
+	\begin{center}
+		\Huge{Паттерн 2}
+	\end{center}
+	\begin{center}
+		\Large{Ключ и значение максимального элемента.}
+	\end{center}
+\end{frame}
+
+\subsection{Паттерн 2, условие}
+\begin{frame}[fragile]
+\frametitle{Ключ и значение максимального элемента}
+		\begin{itemize}
+			\item Усложним чуть-чуть задачу.
+			\item \textbf{Задача}: найти ключ и значение наибольшего элемента массива.
+			\item Здесь уже стандартный метод \emph{max} не поможет, так как он находит только значение, а не ключ.
+			\item Конечно, есть и другие стандартные методы, но мы опять сделаем вручную.
+			\item Нам нужно найти уже два числа: ключ и значение. 
+			\item В данной задаче назовём их \emph{max\_key} и \emph{max\_value}.
+		\end{itemize}
+\end{frame}
+
+\subsection{Паттерн 2, проблемы}
+\begin{frame}[fragile]
+\frametitle{Изменения по сравнению с паттерном 1}
+		\begin{itemize}
+			\item Первое изменение: если мы нашли элемент, который больше текущего максимального, перезаписать нужно не только значение \emph{array[i]}, но и соответствующий значению ключ \emph{i}.
+			\item Второе изменение: функция должна возвращать не только максимальное значение, но и ключ.
+			\item Самый простой способ вернуть несколько значений --- через массив.
+			\item Можно, конечно, вернуть и единичный хэш ``ключ--значение'', в зависимости от общего стиля программы.
+		\end{itemize}
+\end{frame}
+
+\subsection{Паттерн 2, часть 3}
+\begin{frame}[fragile]
+\frametitle{Программа для паттерна 2}
+		\scriptsize{
+	  \begin{lstlisting}[label=ruby3,language=Ruby,caption=Паттерн 2]
+def max(array)
+  return false if array.empty?
+  max_key   = 0
+  max_value = array[0]
+  size = array.size-1
+  for i in 0..size
+    if (array[i] > max)
+      max_key = i
+      max_value = array[i]
+    end
+  end
+  [max_key, max_value]
+end
+	  \end{lstlisting}
+		}
+\end{frame}
+
+\section{Паттерн 3}
+
+\subsection{Паттерн 3}
+\begin{frame}
+	\begin{center}
+		\Huge{Паттерн 3}
+	\end{center}
+	\begin{center}
+		\Large{Когда нужны булевские переменные.}
+	\end{center}
+\end{frame}
+
+\subsection{Паттерн 3, условие}
+\begin{frame}[fragile]
+\frametitle{Поиск отрицательного элемента}
+		\begin{itemize}
+			\item Допустим, перед нами стоит задача узнать, есть ли в массиве отрицательный элемент.
+			\item Конечно, мы бы могли воспользоваться ``магическими'' методами:
+			\item Решим эту задачу без методов \emph{find\_all} и \emph{elem}.
+			\item В нашей задаче ответ бинарный: есть или нет. Если в задаче или подзадаче нужен такой ответ, значит, нужна булевская переменная.
+			\item Её можно назвать \emph{has\_negative} или по старой традиции \emph{flag} (аналог флажка, который либо опущен, лиоб поднят.
+  		\scriptsize{
+  	  \begin{lstlisting}[label=ruby4,language=Ruby,caption=Паттерн 3]
+      puts "Есть" if array.find_all{|elem| elem<0}.any?
+  	  \end{lstlisting}			
+			}
+		\end{itemize}
+\end{frame}
+
+\subsection{Паттерн 3, алгоритм}
+\begin{frame}[fragile]
+\frametitle{Алгоритм решения паттерна 3}
+		\begin{enumerate}
+			\item Пройдёмся по всему массиву. Изначально \emph{has\_negative} присвоим ложь, так как ни одного отрицательного числа мы пока не нашли.
+			\item Проверим пробегаемый элемент, больше он или меньше нуля.
+			\item Если он меньше нуля, то ``опустим флажок'', сделав \emph{has\_negative} равным истине и прервём цикл.
+			\item Итого, если в конце цикла \emph{has\_negative} имеет значение ИСТИНА, то как минимум один отрицательный элемент найден. Иначе --- нет.
+			\item Заметим, что переменная \emph{has\_negative} как раз и будет отвечать на вопрос, есть ли в массиве отрицательный элемент. Поэтому функцией можно просто возвращать её значение.
+		\end{enumerate}
+\end{frame}
+
+\subsection{Паттерн 3, программа}
+\begin{frame}[fragile]
+\frametitle{Программа для паттерна 3}
+		\scriptsize{
+	  \begin{lstlisting}[label=ruby5,language=Ruby,caption=Паттерн 3]
+def array_has_negative(array)
+  return false if array.empty?
+  has_negative = false
+  size = array.size-1
+  for i in 0..size
+    if (array[i] < 0)
+      has_negative = true
+      break
+    end
+  end
+  has_negative
+end
+	  \end{lstlisting}
+		}
+\end{frame}
+
+\subsection{Паттерн 3, усложнение}
+\begin{frame}[fragile]
+\frametitle{Усложним задачу}
+		\begin{itemize}
+			\item Усложним задачу. Допустим, у нас есть массив чисел, содержащий элементы от 1 до 100. Сколько --- неизвестно. Повторы также возможны.
+			\item Требуется вывести на экран те натуральные числа от 1 до 100, которые не встречаются в данном массиве.
+			\item По сути, нам нужно ответить на 100 вопросов: есть ли в массиве число 1, есть ли в массиве число 2 и т.п.
+			\item \textbf{Решение перебором в лоб:} пройтись циклом от 1 до 100 и проверить, есть ли в массиве пробегаемое число. 
+			\item \textbf{Недостаток:} ооочень долгое время работы. Нам придётся совершить $n\cdot 100$ (по 100 проходов для каждого из n чисел) итераций.
+			\item Можно улучшить метод, заведя булевский массив длиной 100. И, пробегая всего лишь один раз по всему массиву
+		\end{itemize}
+\end{frame}
+
+\subsection{Паттерн 3, усложнение 2}
+\begin{frame}[fragile]
+\frametitle{Усложним задачу}
+		\begin{itemize}
+			\item Можно улучшить метод, заведя булевский массив длиной 100. Заполним его изначально ложью. 
+			\item Пройдём по начальному массиву.
+			\item Будем помечать истиной элементы с такими ключами, которые встречаются в виде значений в массиве.
+			\item Дубликаты нам не страшны, так как двойное присваивание ничего не поменяет.
+			\item Кстати, от них можно избавиться с помощью метода \emph{arr.uniq}.
+			\item В конце просто пройдёмся по булевскому массиву и выведем на экран ключи тех элементов, которые равны лжи.
+		\end{itemize}
+\end{frame}
+
+\subsection{Паттерн 3, программа}
+\begin{frame}[fragile]
+\frametitle{Программа для усложнённого паттерна 3}
+		\scriptsize{
+	  \begin{lstlisting}[label=ruby6,language=Ruby,caption=Усложнённый паттерн 3]
+def missen_numbers(array)
+  return (1..100).to_a if array.empty?
+  size = array.size-1
+  has_numbers = []
+  100.times { |i| has_numbers[i] = false }
+  for i in 0..size
+    has_numbers[array[i]-1] = true
+  end
+  numbers = []
+  100.times { |i| numbers[] = i+1 unless has_numbers[i] }
+  numbers
+end
+	  \end{lstlisting}
+		}
+\end{frame}
+
+\subsection{Правило 2}
+\begin{frame}
+	\begin{center}
+		\Huge{Правило 2}
+	\end{center}
+	\begin{center}
+		\Large{Никогда не забывайте, что элементы массива нумеруются с нуля. }
+	\end{center}
+\end{frame}
+
+\subsection{Правило 3}
+\begin{frame}
+	\begin{center}
+		\Huge{Правило 3}
+	\end{center}
+	\begin{center}
+		\Large{Обязательно инициализируйте пустые массивы нужной длины.}
+	\end{center}
+\end{frame}
+
+\subsection{Паттерн 3, усложнение пояснения}
+\begin{frame}[fragile]
+\frametitle{Необходимые пояснения}
+		\begin{itemize}
+			\item Почему мы присваиваем истине \emph{has\_numbers[array[i]-1]}. Откуда минус единица?
+			\item Известно, что значения массива --- это числа от 1 до 100. У нас массив состоит из 100 элементов.
+			\item То есть, ключи определены от 0 до 99. Вычитая единицу, мы ``переводим'' одно представление в другое.
+			\item По аналогичным соображениям в последнем цикле \emph{times} мы прибавляем к ключу единицу (обратная операция).
+			\item \textbf{По правилу 3}: когда вы пишите конструкцию вида \emph{arr[i] = arr[i] + 1}, предполагается, что $i$--ый элемент массива существует и определён. Если это не так, вы получите ошибку.
+		\end{itemize}
+\end{frame}
+
+\section{References}
+\subsection{References}
+\begin{frame}[fragile]
+  \frametitle{References}
+  \begin{itemize}
+    \item Все презентации доступны на http://school.smirik.ru!
+    \item Вопросы, предложения, д/з: smirik@gmail.com
+  \end{itemize}
+\end{frame}
+
+\end{document}
