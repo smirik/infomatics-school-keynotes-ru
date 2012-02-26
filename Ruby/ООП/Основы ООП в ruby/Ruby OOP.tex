@@ -115,7 +115,7 @@
 
 \section{Кот}
 
-\subsection{Объект Кот}
+\subsection{Кот}
 \begin{frame}
   \frametitle{Объект Кот}
 	\centerline{\includegraphics[width=0.5\textwidth]{images/catE.jpg}}
@@ -131,7 +131,7 @@
 \subsection{Свойства кота список}
 \begin{frame}[fragile]
   \frametitle{Свойства кота}
-  \begin{itemize}[<+->]
+  \begin{itemize}
     \item Порода
     \item Цвет
     \item Рост
@@ -153,7 +153,7 @@
 \subsection{Методы кота 2}
 \begin{frame}[fragile]
   \frametitle{Методы кота}
-  \begin{itemize}[<+->]
+  \begin{itemize}
     \item Мяукнуть
     \item Поесть
     \item Потребовать погладить
@@ -179,11 +179,11 @@
 
 \subsection{Собачка}
 \begin{frame}[fragile]
-  \frametitle{Объект Собака}
+  \frametitle{Собака}
   \centerline{\includegraphics[width=0.7\textwidth]{images/dog.jpg}}
 \end{frame}
 
-\subsection{Объект Собака}
+\subsection{Собака}
 \begin{frame}[fragile]
   \frametitle{Сравнение свойств Кота и Собаки}
   \begin{columns}[ll]
@@ -381,6 +381,19 @@
     \item Все методы и свойства класса Polygon автоматически появились в классе Triangle.
     \item Отдельно определяем по формуле Герона площадь треугольника.
     \item Итого, теперь в треугольнике мы можем посчитать и площадь, и периметр.
+  \end{itemize}
+\end{frame}
+
+\subsection{Наследование 3}
+\begin{frame}[fragile]
+  \frametitle{Разбор класса Triangle}
+  \begin{itemize}
+    \item Разберёмся в конструкции self.perimeter.
+    \item \textbf{self} означает текущий объект, то есть тот объект, для которого вызывается метод или свойство.
+    \item \textbf{self.sides} --- замена \textbf{@sides}.
+    \item Однако вызвать метод со знаком @ не получится. Для этого и используем конструкцию self.
+    \item self.perimeter вызывает метод perimeter для текущего объекта.
+    \item \textbf{Задание}. В чём отличие записи @perimeter от self.perimeter? Одинаков ли будет результат. Если нет, приведите пример.
   \end{itemize}
 \end{frame}
 
