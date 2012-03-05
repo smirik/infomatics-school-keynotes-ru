@@ -339,7 +339,7 @@
   \scriptsize{
   \begin{lstlisting}[language=ruby,basicstyle=\footnotesize,label=ruby6,caption=Полиморфизм]
     class Person
-      attr_accessor :first_name, :last_name, :middle_name
+      attr_accessor :first_name, :last_name, :middle_name, :job
       def getName
         @first_name + ' ' + @middle_name
       end
@@ -393,6 +393,64 @@
     \item Чтобы не вставлять в метод проверки и условия, используют полиморфизм, переопределяя метод только там, где нужно.
     \item \textbf{Самостоятельное изучение}. Перегрузка методов, перегрузка / переопределение операций.
   \end{itemize}
+\end{frame}
+
+\subsection{Полиморфизм и конструкторы}
+\begin{frame}[fragile]
+  \frametitle{Конструкторы при полиморфизме}
+  \begin{itemize}
+    \item В созданном классе <<Учитель>> мы можем автоматически проставлять свойство job. 
+    \item Это проще всего сделать с помощью конструктора.
+  \end{itemize}
+  \scriptsize{
+  \begin{lstlisting}[language=ruby,basicstyle=\footnotesize,label=ruby8,caption=Конструктор в полиморфизме]
+    class Teacher < Person
+      def initialize
+        @job = "Teacher"
+      end
+    end
+    
+    t = Teacher.new
+    puts t.job
+  \end{lstlisting}
+  }
+  
+\end{frame}
+
+\subsection{Конструктор родителя}
+\begin{frame}[fragile]
+  \frametitle{Конструктор родителя}
+  \begin{itemize}
+    \item А что делать, если мы хотим вызвать и конструктор родителя, и текущий? Ведь если мы переопределяем с помощью полиморфизма метод initialize, то ``старый'' забывается.
+    \item Для этого в ruby есть специальный метод \textbf{super}.
+    \item Простой вызов этого метода вызовет конструктор родителя.
+    \item Разумеется, в метод super можно передавать аргументы.
+    \item В предложенном на следующем слайде примере код выведет на экран две строчки: <<B>>, <<A>>.
+  \end{itemize}
+  
+\end{frame}
+
+\subsection{Конструктор родителя код}
+\begin{frame}[fragile]
+  \frametitle{Код конструктора родителя}
+  \scriptsize{
+  \begin{lstlisting}[language=ruby,basicstyle=\footnotesize,label=ruby9,caption=Конструктор родителя]
+    class A
+      def initialize(label)
+        puts label
+      end
+    end
+    
+    class B < A
+      def initialize
+        puts "B"
+        super("A")
+      end
+    end
+    
+    b = B.new
+  \end{lstlisting}
+  }
 \end{frame}
 
 \section{Задание}

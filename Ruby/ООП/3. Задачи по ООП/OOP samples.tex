@@ -1,0 +1,589 @@
+\documentclass[compress,red]{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage{ucs}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage[russian]{babel}
+\usepackage{graphicx}
+\usepackage{wrapfig}
+
+\usepackage{tikz}
+\usepackage{verbatim}
+
+\usepackage{color}
+\usepackage{xcolor}
+\usepackage{listings}
+
+\usepackage{caption}
+
+\lstset{
+language=ruby,
+extendedchars=\true,
+inputencoding=utf8x,
+commentstyle=\itshape,
+stringstyle=\bf,
+belowcaptionskip=5pt }
+
+
+\DeclareCaptionFont{white}{\color{white}}
+\DeclareCaptionFormat{listing}{\colorbox{gray}{\parbox{\textwidth}{#1#2#3}}}
+\captionsetup[lstlisting]{format=listing,labelfont=white,textfont=white}
+
+\usetikzlibrary{calc,trees,positioning,arrows,chains,shapes.geometric,%
+    decorations.pathreplacing,decorations.pathmorphing,shapes,%
+    matrix,shapes.symbols}
+
+\tikzset{
+>=stealth',
+  punktchain/.style={
+    rectangle, 
+    rounded corners, 
+    % fill=black!10,
+    draw=black, very thick,
+    text width=10em, 
+    minimum height=3em, 
+    text centered, 
+    on chain},
+  line/.style={draw, thick, <-},
+  element/.style={
+    tape,
+    top color=white,
+    bottom color=blue!50!black!60!,
+    minimum width=8em,
+    draw=blue!40!black!90, very thick,
+    text width=10em, 
+    minimum height=1.5em, 
+    text centered, 
+    on chain},
+  every join/.style={->, thick,shorten <=1pt},
+  decoration={brace},
+  tuborg/.style={decorate},
+  tubnode/.style={midway, right=2pt},
+}
+
+\mode<presentation>
+
+\usetheme{Warsaw}
+
+\definecolor{Red}{rgb}{1,0,0}
+\definecolor{Blue}{rgb}{0,0,1}
+\definecolor{Green}{rgb}{0,1,0}
+\definecolor{magenta}{rgb}{1,0,.6}
+\definecolor{lightblue}{rgb}{0,.5,1}
+\definecolor{lightpurple}{rgb}{.6,.4,1}
+\definecolor{gold}{rgb}{.6,.5,0}
+\definecolor{orange}{rgb}{1,0.4,0}
+\definecolor{hotpink}{rgb}{1,0,0.5}
+\definecolor{newcolor2}{rgb}{.5,.3,.5}
+\definecolor{newcolor}{rgb}{0,.3,1}
+\definecolor{newcolor3}{rgb}{1,0,.35}
+\definecolor{darkgreen1}{rgb}{0, .35, 0}
+\definecolor{darkgreen}{rgb}{0, .6, 0}
+\definecolor{darkred}{rgb}{.75,0,0}
+
+\xdefinecolor{olive}{cmyk}{0.64,0,0.95,0.4}
+\xdefinecolor{purpleish}{cmyk}{0.75,0.75,0,0}
+
+\useoutertheme[subsection=false]{smoothbars}
+
+\title{Задачи по ООП}
+\author{Информатика \\ 10-11 классы}
+
+%\usecolortheme{dolphin}
+
+
+\begin{document}
+%%титульная страница
+\maketitle
+%% основные моменты
+
+\section{Задание 1}
+
+\subsection{Задание}
+\begin{frame}[fragile]
+  \frametitle{Задание}
+  \begin{itemize}
+    \item Создать следующие классы: человек, ученик, ученик--раздолбай, учитель, директор. 
+    \item Каждый человек имеет: фамилию, имя, отчество, год рождения. Наследование определено в соответствии со здравым смыслом (ученик--раздолбай --- наследник ученика). Все сущности имеют методы:
+     \begin{enumerate}
+      \item Посчитать возраст (getAges).
+      \item обратиться по имени (getName) по правилу: учитель и директор --- имя + отчество, ученик --- имя, ученик-раздолбай --- ``Бяка'' + имя. 
+      \item булевский метод главный (head?): для директора возвращается истина, для остальных --- ложь.
+     \end{enumerate} 
+    \item ФИО и год рождения должно задаваться в конструкторе.
+    \item После реализации создать экземпляры каждого класса и вызвать для них методы getName, getAges, head?.
+  \end{itemize}
+\end{frame}
+
+\subsection{Задание 1-1}
+\begin{frame}[fragile]
+  \frametitle{Шаг 1}
+  \begin{itemize}
+    \item Прежде всего, создадим класс Person.
+    \item В классе есть четыре свойства: first\_name, last\_name, middle\_name, birthday
+  \end{itemize}
+  
+  \scriptsize{
+  \begin{lstlisting}[language=ruby,basicstyle=\footnotesize,label=ruby1,caption=Основа Person]
+    class Person
+      attr_accessor :first_name, :last_name,
+                    :middle_name, :birthday
+    end
+  \end{lstlisting}
+  }
+\end{frame}
+
+\subsection{Задание 1-2}
+\begin{frame}[fragile]
+  \frametitle{Шаг 2}
+  \begin{itemize}
+    \item В условии задачи требуется, чтобы основные свойства класса задавались сразу.
+    \item То есть, мы хотим, чтобы работал следующий код:
+  \end{itemize}
+  \scriptsize{
+  \begin{lstlisting}[language=ruby,basicstyle=\footnotesize,label=ruby2,caption=Пример объекта]
+    p = Person.new("Иванов", "Иван", "Иванович", 1975)
+  \end{lstlisting}
+  }
+\end{frame}
+
+\subsection{Задание 1-3}
+\begin{frame}[fragile]
+  \frametitle{Шаг 3}
+  \begin{itemize}
+    \item Для того, чтобы при создании можно было сразу задать какие-либо параметры, нам нужно определить конструктор.
+    \item Конструктор на вход (в соответствии с кодом предыдущего слайда) будет принимать 4 аргумента.
+  \end{itemize}
+  \scriptsize{
+  \begin{lstlisting}[language=ruby,basicstyle=\footnotesize,label=ruby3,caption=Конструктор]
+  class Person
+    attr_accessor :first_name, :last_name,
+                  :middle_name, :birthday
+    def initialize(fname, lname, mname, birthday)
+      @first_name  = fname
+      @last_name   = lname
+      @middle_name = mname
+      @birthday    = birthday 
+    end
+  end    
+  \end{lstlisting}
+  }
+\end{frame}
+
+\subsection{Задание 1-4}
+\begin{frame}[fragile]
+  \frametitle{Шаг 4}
+  \begin{itemize}
+    \item Возраст у экземпляров класса Person и у его наследников будет считаться всегда одинаково.
+    \item Поэтому определим соответствующий метод в самом классе Person.
+    \item Через механизм наследования метод автоматически будет доступен всем наследникам.
+  \end{itemize}
+  \scriptsize{
+  \begin{lstlisting}[language=ruby,basicstyle=\footnotesize,label=ruby4,caption=Метод age]
+    class Person
+      ...
+      def age
+        2012 - @birthday
+      end
+    end
+  \end{lstlisting}
+  }
+\end{frame}
+
+\subsection{Задание 1-5}
+\begin{frame}[fragile]
+  \frametitle{Шаг 5}
+  \begin{itemize}
+    \item В большинстве случаев метод head? будет возвращать ложь (за исключением объекта класса Директор).
+    \item Поэтому создадим базовый метод в классе Person, а в классе Headmaster используем полиморфизм (переопределение метода) для изменения результата.
+  \end{itemize}
+  \scriptsize{
+  \begin{lstlisting}[language=ruby,basicstyle=\footnotesize,label=ruby5,caption=Метод head]
+    class Person
+      ...
+      def head?
+        false
+      end
+    end
+  \end{lstlisting}
+  }
+\end{frame}
+
+\subsection{Задание 1-6}
+\begin{frame}[fragile]
+  \frametitle{Шаг 6}
+  \begin{itemize}
+    \item Стандартное обращение к человеку --- по имени--отчеству. 
+    \item Раз стандартное --- значит, определяем в классе--родителе. При необходимости используем полиморфизм.
+  \end{itemize}
+  
+  \scriptsize{
+  \begin{lstlisting}[language=ruby,basicstyle=\footnotesize,label=ruby6,caption=Метод name]
+    class Person
+      ...
+      def name
+        @first_name + " " + @middle_name
+      end
+    end
+  \end{lstlisting}
+  }
+\end{frame}
+
+\subsection{Задание 1-7}
+\begin{frame}[fragile]
+  \frametitle{Шаг 7}
+  \begin{itemize}
+    \item Проверим класс Person, вызвав последовательно все методы.
+  \end{itemize}
+  \scriptsize{
+  \begin{lstlisting}[language=ruby,basicstyle=\footnotesize,label=ruby7,caption=Person]
+    p = Person.new("Иванов", "Иван", "Иванович", 1975)
+    puts p.name
+    puts p.age
+    puts p.head?
+  \end{lstlisting}
+  }
+\end{frame}
+
+\subsection{Задание 1-8}
+\begin{frame}[fragile]
+  \frametitle{Шаг 8}
+  \begin{itemize}
+    \item Класс Teacher имеет абсолютно стандартную реализацию.
+    \item Все методы в нём совпадают с методами Person.
+    \item Поэтому достаточно просто его определить.
+  \end{itemize}
+  
+  \scriptsize{
+  \begin{lstlisting}[language=ruby,basicstyle=\footnotesize,label=ruby8,caption=Teacher]
+    class Teacher < Person
+    end
+  \end{lstlisting}
+  }
+  
+\end{frame}
+
+\subsection{Задание 1-9}
+\begin{frame}[fragile]
+  \frametitle{Шаг 9}
+  \begin{itemize}
+    \item У ученика другое обращение.
+    \item Используем полиморфизм для переопределения метода \textbf{name}.
+  \end{itemize}
+  \scriptsize{
+  \begin{lstlisting}[language=ruby,basicstyle=\footnotesize,label=ruby9,caption=Student]
+    class Student < Person
+      def name
+        @first_name
+      end
+    end
+  \end{lstlisting}
+  }
+\end{frame}
+
+\subsection{Задание 1-10}
+\begin{frame}[fragile]
+  \frametitle{Шаг 10}
+  \begin{itemize}
+    \item Класс BadStudent также имеет отличное ото всех обращение с приставкой <<Бяка>>.
+  \end{itemize}
+  \scriptsize{
+  \begin{lstlisting}[language=ruby,basicstyle=\footnotesize,label=ruby10,caption=BadStudent]
+    class BadStudent < Student
+      def name
+        "Byaka " + @first_name
+      end
+    end
+  \end{lstlisting}
+  }
+\end{frame}
+
+\subsection{Задание 1-11}
+\begin{frame}[fragile]
+  \frametitle{Шаг 11}
+  \begin{itemize}
+    \item Класс Headmaster имеет стандартное обращение по имени--отчеству.
+    \item Значит, метод name переопределять не надо.
+    \item А вот метод head? должен возвращать истину.
+  \end{itemize}
+  \scriptsize{
+  \begin{lstlisting}[language=ruby,basicstyle=\footnotesize,label=ruby11,caption=Headmaster]
+    class Headmaster < Person
+      def head?
+        true
+      end
+    end
+  \end{lstlisting}
+  }
+  
+\end{frame}
+
+\section{Задание 2}
+
+\subsection{Сложное задание}
+\begin{frame}[fragile]
+  \frametitle{Сложное задание}
+  \begin{itemize}
+    \item Реализовать класс \textbf{Двумерный Вектор}. 
+    \item Класс имеет два свойства: x-компонента, y-компонента. 
+    \item Методы класса:
+      \begin{enumerate}
+        \item посчитать длину (модуль)
+        \item прибавить к текущему вектору другой
+        \item отнять от текущего вектора другой
+        \item изменить знак вектора (-вектор)
+        \item умножить вектор на скаляр (вещественное число)
+        \item скалярно умножить на другой вектор
+      \end{enumerate}
+  \end{itemize}
+\end{frame}
+
+\subsection{Задание 2-1}
+\begin{frame}[fragile]
+  \frametitle{Шаг 1}
+  \begin{itemize}
+    \item Прежде всего, определимся, что есть у вектора.
+    \item Двумерный вектор --- это два числа (x,y) (аналог радиус--вектора в геометрии).
+    \item Других свойств у вектора нет. Но как хранить эти?
+    \item Два варианта:
+      \begin{enumerate}
+        \item В свойствах :x, :y.
+        \item В едином свойстве :coords
+      \end{enumerate}
+    \item Второй вариант универсальнее, поэтому будем использовать его.
+    \item \textbf{NB}. Кстати, мы сделаем программу для векторов любой размерности.
+  \end{itemize}
+\end{frame}
+
+\subsection{Задание 2-2}
+\begin{frame}[fragile]
+  \frametitle{Шаг 2}
+  \begin{itemize}
+    \item В конструкторе \textbf{по умолчанию} зададим значение координат в виде пустого массива.
+  \end{itemize}
+  \scriptsize{
+  \begin{lstlisting}[language=ruby,basicstyle=\footnotesize,label=ruby12,caption=Vector]
+    class Vector
+      attr_accessor :coords
+      
+      def initialize(coords = [])
+        @coords = coords
+      end
+    end
+    
+    v = Vector.new([1, 2])
+  \end{lstlisting}
+  }
+\end{frame}
+
+\subsection{Задание 2-3}
+\begin{frame}[fragile]
+  \frametitle{Шаг 3}
+  \begin{itemize}
+    \item Определим метод подсчёта модуля.
+    \item Модуль вычисляется по теореме Пифагора:
+    $$
+      \sqrt{\sum_i coords[i]^2}
+    $$
+  \end{itemize}
+  \scriptsize{
+  \begin{lstlisting}[language=ruby,basicstyle=\footnotesize,label=ruby13,caption=Вычисление модуля]
+    class Vector
+      ..
+      def module
+        (@coords.inject(0){|res, elem| res+elem**2})**0.5
+      end
+    end
+  \end{lstlisting}
+  }
+\end{frame}
+
+\subsection{Задание 2-4}
+\begin{frame}[fragile]
+  \frametitle{Шаг 4}
+  \begin{itemize}
+    \item Заметим, что модуль будет вычисляться не только для двумерного вектора, но и для вектора любой размерности.
+    \item Теперь определим операцию сложения.
+    \item При сложении компоненты векторов также складываются.
+    \item \textbf{Важно}: операция сложения должна возвращать новый вектор --- сумму текущего и того, с которым складываем.
+    \item Сложение делаем покоординатно.
+  \end{itemize}
+\end{frame}
+
+\subsection{Задание 2-4-1}
+\begin{frame}[fragile]
+  \frametitle{Шаг 4, часть 2}
+  \scriptsize{
+  \begin{lstlisting}[language=ruby,basicstyle=\footnotesize,label=ruby14,caption=Сложение]
+  def +(v)
+    sum = Vector.new
+    size = @coords.size-1
+    for i in 0..size
+      sum.coords[i] = @coords[i] + v.coords[i]
+    end
+    sum
+  end
+  \end{lstlisting}
+  }
+\end{frame}
+
+\subsection{Задание 2-4-2}
+\begin{frame}[fragile]
+  \frametitle{Шаг 4, часть 2, альтернатива}
+  \begin{itemize}
+    \item Для упрощения записи используем метод each\_index, который проходит по каждому индексу массива.
+  \end{itemize}
+  \scriptsize{
+  \begin{lstlisting}[language=ruby,basicstyle=\footnotesize,label=ruby15,caption=Упрощение]
+  def +(v)
+    sum = Vector.new
+    @coords.each_index{|i| sum.coords[i] = 
+      @coords[i]+v.coords[i]}
+    sum
+  end    
+  \end{lstlisting}
+  }
+  
+\end{frame}
+
+\subsection{Задание 2-5}
+\begin{frame}[fragile]
+  \frametitle{Шаг 5}
+  \begin{itemize}
+    \item Операция умножения немного сложнее.
+    \item Если мы умножаем на число, то надо все компоненты вектора умножить на данное число.
+    \item Если же мы умножаем вектор на вектор, то надо возвращать скалярное произведение.
+    \item Как отличить, что нам передаётся в качестве аргумента?
+    \item Используем метод \textbf{class}, который возвращает строку с названием класса.
+  \end{itemize}
+\end{frame}
+
+\subsection{Задание 2-5-1}
+\begin{frame}[fragile]
+  \frametitle{Шаг 5, часть 2}
+  \scriptsize{
+  \begin{lstlisting}[language=ruby,basicstyle=\footnotesize,label=ruby16,caption=Умножение]
+    def *(v)
+      if (v.class == Vector)
+        product = 0
+        @coords.each_index{|i| product+=
+          @coords[i]*v.coords[i]}
+      else
+        product = Vector.new
+        @coords.each_index{|i| product.coords[i] =
+          @coords[i]*v}
+      end
+      product
+    end
+  \end{lstlisting}
+  }
+  
+\end{frame}
+
+\subsection{Задание 2-6}
+\begin{frame}[fragile]
+  \frametitle{Шаг 6}
+  \begin{itemize}
+    \item Аналогично делаем остальные методы. 
+    \item Например, метод <<отрицание>>.
+  \end{itemize}
+  
+  \scriptsize{
+  \begin{lstlisting}[language=ruby,basicstyle=\footnotesize,label=ruby17,caption=Отрицание]
+    def -@
+      self.coords = self.coords.map{|i| -i}
+    end
+  \end{lstlisting}
+  }
+  
+\end{frame}
+
+\subsection{Задание 2-7}
+\begin{frame}[fragile]
+  \frametitle{Шаг 7}
+  \scriptsize{
+  \begin{lstlisting}[language=ruby,basicstyle=\footnotesize,label=ruby18,caption=Упрощение]
+  def -(v)
+    sum = Vector.new
+    @coords.each_index{|i| sum.coords[i] = 
+      @coords[i]-v.coords[i]}
+    sum
+  end    
+  \end{lstlisting}
+  }  
+\end{frame}
+
+\subsection{Мысль}
+\begin{frame}
+  \begin{center}
+    \Huge{Мысль}
+  \end{center}
+  \begin{center}
+    \Large{Класс Vector очень и очень похож на класс Array}
+  \end{center}
+\end{frame}
+
+\subsection{Расшифровка}
+\begin{frame}[fragile]
+  \frametitle{Расшифровка мысли}
+  \begin{itemize}
+    \item Класс Vector, как мы определили на шаге 1, имеет только одно свойство --- координаты.
+    \item Координаты представляют собой массив.
+    \item Раз всё в ruby --- объекты, значит, и массивы тоже.
+    \item А, значит, логично было бы вместо определения класса Vector, отнаследовать его от массива.
+  \end{itemize}
+    \scriptsize{
+    \begin{lstlisting}[language=ruby,basicstyle=\footnotesize,label=ruby19,caption=Вектор vs Массив]
+      class Vector < Array
+      end
+    \end{lstlisting}
+    }
+\end{frame}
+
+\subsection{С массивом}
+\begin{frame}[fragile]
+  \frametitle{Работа с массивом}
+  \begin{itemize}
+    \item Теперь мы можем обращаться к i-ой координате внутри класса так: \textbf{self[i]}.
+    \item Пример метода:
+  \end{itemize}
+    \scriptsize{
+    \begin{lstlisting}[language=ruby,basicstyle=\footnotesize,label=ruby20, caption=Вектор как массив]
+      class Vector < Array
+        def +(a)
+          sum = Vector.new
+          self.each_index{|k| sum[k] = self[k]+a[k]}
+          sum
+        end      
+      end
+    \end{lstlisting}
+    }
+\end{frame}
+
+\subsection{Создание вектора}
+\begin{frame}[fragile]
+  \frametitle{Создание векторомассива}
+  \scriptsize{
+  \begin{lstlisting}[language=ruby,basicstyle=\footnotesize,label=ruby21,caption=Создание]
+    v1 = Vector.new[1,2,3]
+    v2 = Vector.new[3,4,5]
+    v3 = v1+v3
+    puts v3.inspect
+  \end{lstlisting}
+  }
+  
+\end{frame}
+
+\section{References}
+\subsection{References}
+\begin{frame}[fragile]
+  \frametitle{References}
+  \begin{itemize}
+    \item При подготовке данного материала использовались сайты: http://ru.wikibooks.org/wiki/Ruby, http://rubydev.ru, http://en.wikipedia.org, http://ruby-lang.org.
+    \item Все презентации доступны на http://school.smirik.ru!
+    \item Вопросы, предложения, д/з: smirik@gmail.com
+  \end{itemize}
+\end{frame}
+
+\end{document}
