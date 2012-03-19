@@ -1,0 +1,224 @@
+\documentclass[compress,red]{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage{ucs}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage[russian]{babel}
+\usepackage{graphicx}
+\usepackage{wrapfig}
+
+\usepackage{tikz}
+\usepackage{verbatim}
+
+\usepackage{color}
+\usepackage{xcolor}
+\usepackage{listings}
+
+\usepackage{caption}
+
+\lstset{
+language=ruby,
+extendedchars=\true,
+inputencoding=utf8x,
+commentstyle=\itshape,
+stringstyle=\bf,
+belowcaptionskip=5pt }
+
+
+\DeclareCaptionFont{white}{\color{white}}
+\DeclareCaptionFormat{listing}{\colorbox{gray}{\parbox{\textwidth}{#1#2#3}}}
+\captionsetup[lstlisting]{format=listing,labelfont=white,textfont=white}
+
+\usetikzlibrary{calc,trees,positioning,arrows,chains,shapes.geometric,%
+    decorations.pathreplacing,decorations.pathmorphing,shapes,%
+    matrix,shapes.symbols}
+
+\tikzset{
+>=stealth',
+  punktchain/.style={
+    rectangle, 
+    rounded corners, 
+    % fill=black!10,
+    draw=black, very thick,
+    text width=10em, 
+    minimum height=3em, 
+    text centered, 
+    on chain},
+  line/.style={draw, thick, <-},
+  element/.style={
+    tape,
+    top color=white,
+    bottom color=blue!50!black!60!,
+    minimum width=8em,
+    draw=blue!40!black!90, very thick,
+    text width=10em, 
+    minimum height=1.5em, 
+    text centered, 
+    on chain},
+  every join/.style={->, thick,shorten <=1pt},
+  decoration={brace},
+  tuborg/.style={decorate},
+  tubnode/.style={midway, right=2pt},
+}
+
+\mode<presentation>
+
+\usetheme{Warsaw}
+
+\definecolor{Red}{rgb}{1,0,0}
+\definecolor{Blue}{rgb}{0,0,1}
+\definecolor{Green}{rgb}{0,1,0}
+\definecolor{magenta}{rgb}{1,0,.6}
+\definecolor{lightblue}{rgb}{0,.5,1}
+\definecolor{lightpurple}{rgb}{.6,.4,1}
+\definecolor{gold}{rgb}{.6,.5,0}
+\definecolor{orange}{rgb}{1,0.4,0}
+\definecolor{hotpink}{rgb}{1,0,0.5}
+\definecolor{newcolor2}{rgb}{.5,.3,.5}
+\definecolor{newcolor}{rgb}{0,.3,1}
+\definecolor{newcolor3}{rgb}{1,0,.35}
+\definecolor{darkgreen1}{rgb}{0, .35, 0}
+\definecolor{darkgreen}{rgb}{0, .6, 0}
+\definecolor{darkred}{rgb}{.75,0,0}
+
+\xdefinecolor{olive}{cmyk}{0.64,0,0.95,0.4}
+\xdefinecolor{purpleish}{cmyk}{0.75,0.75,0,0}
+
+\useoutertheme[subsection=false]{smoothbars}
+
+\title{Задачи по ruby}
+\author{Информатика \\ 10-11 классы}
+
+%\usecolortheme{dolphin}
+
+
+\begin{document}
+%%титульная страница
+\maketitle
+%% основные моменты
+
+\section{Задача 1}
+\subsection{Задача 1}
+
+\begin{frame}[fragile]
+  \begin{center}
+    \Large{Даны две точки $(x_1, y_1)$, $(x_2, y_2)$. Написать программу, определяющую, какая из точек (первая или вторая) находится ближе к началу координат. Точки задать в виде двух переменных--массивов.}
+  \end{center}
+  \scriptsize{
+  \begin{lstlisting}[language=ruby,basicstyle=\footnotesize,label=ruby1,caption=Начальные условия]
+    point1 = [5.01, 2.35]
+    point2 = [2.75, 3.62]
+    ...
+  \end{lstlisting}
+  }
+  
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Решение задачи 1}
+    \begin{lstlisting}[label=ruby2,caption=Решение задачи 1]
+      point1 = [5.01, 2.35]
+      point2 = [2.75, 3.62]
+      
+      def distance(point)
+        (point[0]**2+point[1]**2)**0.5
+      end
+      
+      if (distance(point1) < distance(point2))
+        puts "First"
+      else
+        puts "Second"
+      end
+    \end{lstlisting}
+\end{frame}
+
+\subsection{Задание на дом 1}
+\begin{frame}[fragile]
+  \frametitle{Домашнее задание 1}
+  \begin{itemize}
+    \item Создать класс Point. В классе имеется два свойства: x, y (координата по оси абсцисс и ординат). Реализовать в классе метод distance, рассчитывающий расстояние от начала координат. Решить задачу 1 с помощью данного класса, его методов и свойств. 
+  \end{itemize}
+\end{frame}
+
+\section{Задача 2}
+\subsection{Задача 2}
+
+\begin{frame}[fragile]
+  \begin{center}
+    \Large{Дана строка s. Найти и вывести на экран самое длинное слово.}
+  \end{center}
+  \scriptsize{
+  \begin{lstlisting}[language=ruby,basicstyle=\footnotesize,label=ruby3,caption=Начальные условия]
+    s = 'This is the House that Jack built'
+    ...
+  \end{lstlisting}
+  }
+  
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Решение задачи 1}
+    \begin{lstlisting}[label=ruby4,caption=Решение задачи 2]
+      s = 'This is the House that Jack built'
+      words = s.split(" ")
+      max_word = ''
+      size = words.size-1
+      for i in 0..size
+        if (words[i].size > max_word.size)
+          max_word = words[i]
+        end
+      end
+      puts max_word
+    \end{lstlisting}
+\end{frame}
+
+\subsection{Задание на дом 2}
+\begin{frame}[fragile]
+  \frametitle{Домашнее задание 2}
+  \begin{itemize}
+    \item Реализовать программу с использованием (на выбор) методов each, each\_with\_index, each\_index.
+    \item Найти самое длинное слово в предложении. Если их несколько, вывести все.
+  \end{itemize}
+\end{frame}
+
+\section{Задача 3}
+\subsection{Задача 3}
+
+\begin{frame}[fragile]
+  \begin{center}
+    \Large{Дано число num. Определить, является ли оно палиндромом (одинаково в прямом и обратном порядках). Пример палиндромов: 123321, 666, 2442}
+  \end{center}
+  \scriptsize{
+  \begin{lstlisting}[language=ruby,basicstyle=\footnotesize,label=ruby5,caption=Начальные условия]
+    num = 2442
+    ...
+  \end{lstlisting}
+  }
+  
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Решение задачи 3}
+    \begin{lstlisting}[label=ruby6,caption=Решение задачи 3]
+      num   = 2442
+      s_num = num.to_s
+      if (s_num == s_num.reverse)
+        puts "Yes :)"
+      else
+        puts "Noooooo"
+      end
+    \end{lstlisting}
+\end{frame}
+
+\subsection{Задание на дом 3}
+\begin{frame}[fragile]
+  \frametitle{Домашнее задание 3}
+  \begin{itemize}
+    \item Дано число num. Написать программу, вычисляющую разность между числом num и записанным в обратном порядке num.
+    \item Пример: num = 123. 
+    \item Правильный ответ: $|123-321| = |-198| = 198$
+  \end{itemize}
+\end{frame}
+
+\end{document}
