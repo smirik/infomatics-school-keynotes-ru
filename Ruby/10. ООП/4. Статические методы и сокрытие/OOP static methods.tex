@@ -1,0 +1,335 @@
+\documentclass[compress,red]{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage{ucs}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage[russian]{babel}
+\usepackage{graphicx}
+\usepackage{wrapfig}
+
+\usepackage{tikz}
+\usepackage{verbatim}
+
+\usepackage{color}
+\usepackage{xcolor}
+\usepackage{listings}
+
+\usepackage{caption}
+
+\lstset{
+language=ruby,
+extendedchars=\true,
+inputencoding=utf8x,
+commentstyle=\itshape,
+stringstyle=\bf,
+belowcaptionskip=5pt }
+
+
+\DeclareCaptionFont{white}{\color{white}}
+\DeclareCaptionFormat{listing}{\colorbox{gray}{\parbox{\textwidth}{#1#2#3}}}
+\captionsetup[lstlisting]{format=listing,labelfont=white,textfont=white}
+
+\usetikzlibrary{calc,trees,positioning,arrows,chains,shapes.geometric,%
+    decorations.pathreplacing,decorations.pathmorphing,shapes,%
+    matrix,shapes.symbols}
+
+\tikzset{
+>=stealth',
+  punktchain/.style={
+    rectangle, 
+    rounded corners, 
+    % fill=black!10,
+    draw=black, very thick,
+    text width=10em, 
+    minimum height=3em, 
+    text centered, 
+    on chain},
+  line/.style={draw, thick, <-},
+  element/.style={
+    tape,
+    top color=white,
+    bottom color=blue!50!black!60!,
+    minimum width=8em,
+    draw=blue!40!black!90, very thick,
+    text width=10em, 
+    minimum height=1.5em, 
+    text centered, 
+    on chain},
+  every join/.style={->, thick,shorten <=1pt},
+  decoration={brace},
+  tuborg/.style={decorate},
+  tubnode/.style={midway, right=2pt},
+}
+
+\mode<presentation>
+
+\usetheme{Warsaw}
+
+\definecolor{Red}{rgb}{1,0,0}
+\definecolor{Blue}{rgb}{0,0,1}
+\definecolor{Green}{rgb}{0,1,0}
+\definecolor{magenta}{rgb}{1,0,.6}
+\definecolor{lightblue}{rgb}{0,.5,1}
+\definecolor{lightpurple}{rgb}{.6,.4,1}
+\definecolor{gold}{rgb}{.6,.5,0}
+\definecolor{orange}{rgb}{1,0.4,0}
+\definecolor{hotpink}{rgb}{1,0,0.5}
+\definecolor{newcolor2}{rgb}{.5,.3,.5}
+\definecolor{newcolor}{rgb}{0,.3,1}
+\definecolor{newcolor3}{rgb}{1,0,.35}
+\definecolor{darkgreen1}{rgb}{0, .35, 0}
+\definecolor{darkgreen}{rgb}{0, .6, 0}
+\definecolor{darkred}{rgb}{.75,0,0}
+
+\xdefinecolor{olive}{cmyk}{0.64,0,0.95,0.4}
+\xdefinecolor{purpleish}{cmyk}{0.75,0.75,0,0}
+
+\useoutertheme[subsection=false]{smoothbars}
+
+\title{Статические свойства и методы и сокрытие данных}
+\author{Информатика \\ 10-11 классы}
+
+%\usecolortheme{dolphin}
+
+
+\begin{document}
+%%титульная страница
+\maketitle
+%% основные моменты
+
+\section{Сокрытие данных}
+
+\subsection{Сокрытие данных}
+\begin{frame}[fragile]
+  \frametitle{Сокрытие данных}
+  \begin{itemize}
+    \item Одним из важнейших свойств инкапсуляции является \emph{сокрытие методов}.
+    \item Пример (rubydev): для пояснения термина нам помогут самые обычные хоббиты.
+    \item Они дружественны и открыты для других, но и у них есть также личная жизнь. 
+    \item Многое из их личной жизни доступно для других хоббитов так как в своем хоббитовом царстве они могут бродить по жилищам друг друга. 
+    \item Конечно, каждый хоббит имеет что-то очень личное, такое, что знает один лишь он и никому и никогда не раскроет своей тайны. 
+    \item Такие особенности устройства поведения хоббитов очень похожи на методы в Ruby. 
+    \item Давайте представим каждого хоббита как объект.
+  \end{itemize}
+\end{frame}
+
+\subsection{Класс Хоббит}
+\begin{frame}[fragile]
+  \frametitle{Класс Хоббит}
+  \scriptsize{
+  \begin{lstlisting}[language=ruby,basicstyle=\footnotesize,label=ruby1,caption=Класс Хоббит]
+    class Hobbit
+      def initialize(name, rooms, has_ring)
+        @name, @rooms, @has_ring = name, rooms, has_ring
+      end
+
+      def name
+        @name
+      end
+
+      def name_of(hobbit)
+        hobbit.name
+      end
+
+      def rooms_of(hobbit)
+        hobbit.rooms
+      end
+  \end{lstlisting}
+  }
+\end{frame}
+
+\subsection{Класс Хоббит 2}
+\begin{frame}[fragile]
+  \frametitle{Класс Хоббит}
+  \scriptsize{
+  \begin{lstlisting}[language=ruby,basicstyle=\footnotesize,label=ruby2,caption=Класс Хоббит]
+      def hobbit_has_ring?(hobbit)
+        hobbit.has_ring?
+      end
+
+      protected
+
+      def rooms
+        @rooms
+      end
+
+      private
+
+      def has_ring?
+        @has_ring
+      end
+    end
+  \end{lstlisting}
+  }
+\end{frame}
+
+\subsection{Класс Хоббит описание}
+\begin{frame}[fragile]
+  \frametitle{Что мы получили?}
+  \begin{itemize}
+    \item Итого, в нашем классе Хоббит есть 5 методов.
+    \item Три из них расположены в публичной (public) зоне, которая всегда идёт по умолчанию: name\_of, rooms\_of, hobbit\_has\_ring?
+    \item Один метод является защищённым (protected): rooms.
+    \item Ещё один метод --- приватным (private): has\_ring?
+  \end{itemize}
+\end{frame}
+
+\subsection{Класс Хоббит использование}
+\begin{frame}[fragile]
+  \frametitle{Используем хоббитов}
+  \begin{itemize}
+    \item Создадим пару хоббитов и выведем их имена.
+  \end{itemize}
+  \scriptsize{
+  \begin{lstlisting}[language=ruby,basicstyle=\footnotesize,label=ruby3,caption=Использование Хоббита]
+    frodo = Hobbit.new(‘Frodo’, 3, true)
+    samwise = Hobbit.new(‘Samwise’, 2, false)
+    
+    puts frodo.name
+    puts samwise.name
+  \end{lstlisting}
+  }
+\end{frame}
+
+\subsection{Защищённые методы}
+\begin{frame}[fragile]
+  \frametitle{Защищённые методы}
+  \begin{itemize}
+    \item А если мы хотим узнать количество комнат у хоббита?
+    \item Простой вызов \textbf{frodo.rooms} вызовет ошибку, так как метод rooms является защищённым.
+    \item Защищённые методы можно вызвать только изнутри объекта. При вызове снаружи возникает ошибка.
+    \item На нашем примере: хоббиты скрывают количество комнат в своих домах от других живых существ, но между собой у них в этом секрета нет.
+    \item Любой хоббит может узнать количество комнат себя или другого хоббита.
+  \end{itemize}
+\end{frame}
+
+\subsection{Количество комнат}
+\begin{frame}[fragile]
+  \frametitle{Количество комнат}
+  \scriptsize{
+  \begin{lstlisting}[language=ruby,basicstyle=\footnotesize,label=ruby4,caption=Количество комнат]
+  frodo   = Hobbit.new(‘Frodo’, 3, true)
+  samwise = Hobbit.new(‘Samwise’, 2, false)
+  
+  puts frodo.rooms_of(frodo)
+  puts frodo.rooms_of(samwise)
+    
+  \end{lstlisting}
+  }
+  
+\end{frame}
+
+\subsection{Приватные методы}
+\begin{frame}[fragile]
+  \frametitle{А что насчёт кольца?}
+  \begin{itemize}
+    \item Кольцо расположено в приватной области.
+    \item При попытке вызвать метод has\_ring или hobbit\_has\_ring возникает ошибка:
+  \end{itemize}
+  \scriptsize{
+  \begin{lstlisting}[language=ruby,basicstyle=\footnotesize,label=ruby5,caption=Ошибка при вызове]
+    ...
+    frodo.has_ring?
+    frodo.hobbit_has_ring?(frodo)  
+    frodo.hobbit_has_ring?(samwise)  
+  \end{lstlisting}
+  }
+\end{frame}
+
+\subsection{Пояснение}
+\begin{frame}[fragile]
+  \frametitle{Приватные методы}
+  \begin{itemize}
+    \item Доступ к приватным методам возможен только из самого объекта.
+    \item Извне ни к своим, ни к чужим методам доступ получить нельзя.
+    \item Условно говоря, приватные свойства и методы --- это та информация, которую знает только один конкретный экземпляр класса.
+  \end{itemize}
+\end{frame}
+
+\subsection{Статические свойства и методы}
+\begin{frame}[fragile]
+  \frametitle{Статические свойства и методы}
+  \begin{itemize}
+    \item В обычном случае мы вызываем методы у объектов.
+    \item То есть, процедура такая: написать класс, создать объект, вызвать метод.
+    \item Однако методы могут быть не только у объекта, но и у класса в целом.
+    \item По своей логике они напоминают обычные функции, в названии которых дополнительно встречается приставка с именем класса.
+  \end{itemize}
+\end{frame}
+
+\subsection{Пример}
+\begin{frame}[fragile]
+  \frametitle{Пример}
+  \begin{itemize}
+    \item 
+  \end{itemize}
+  \scriptsize{
+  \begin{lstlisting}[language=ruby,basicstyle=\footnotesize,label=ruby6,caption=Пример статического метода]
+    class Hobbit
+
+      def self.location
+        return "Shire"
+      end
+
+    end
+
+    puts Hobbit.location
+  \end{lstlisting}
+  }
+  
+\end{frame}
+
+\subsection{Статические переменные}
+\begin{frame}[fragile]
+  \frametitle{Статические переменные}
+  \begin{itemize}
+    \item Статические переменные --- это переменные, которые существуют у класса в единственном экземпляре.
+    \item То есть, разные экземпляры класса будут иметь одну и ту же переменную.
+  \end{itemize}
+\end{frame}
+
+\subsection{Пример программы}
+\begin{frame}[fragile]
+  \frametitle{Пример программы}
+  \scriptsize{
+  \begin{lstlisting}[language=ruby,basicstyle=\footnotesize,label=ruby7,caption=Статическое свойство]
+  class Hobbit
+    attr_accessor :number
+    @@number = 0
+    def initialize
+      @@number+=1
+    end
+    def show
+      puts "#{@@number}"
+    end
+  end
+  frodo = Hobbit.new
+  frodo.show
+  samwise = Hobbit.new
+  samwise.show
+  frodo.show
+  \end{lstlisting}
+  }
+\end{frame}
+
+\subsection{Задание}
+\begin{frame}[fragile]
+  \frametitle{Задание}
+  \begin{itemize}
+    \item Написать эссе на тему: Что такое Синглтон (Singleton). Реализовать на синглтон на ruby и продемонстрировать работу.
+  \end{itemize}
+\end{frame}
+
+\section{References}
+\subsection{References}
+\begin{frame}[fragile]
+  \frametitle{References}
+  \begin{itemize}
+    \item При подготовке данного материала использовались сайты: http://ru.wikibooks.org/wiki/Ruby, http://rubydev.ru, http://en.wikipedia.org, http://ruby-lang.org.
+    \item Все презентации доступны на http://school.smirik.ru!
+    \item Вопросы, предложения, д/з: smirik@gmail.com
+  \end{itemize}
+\end{frame}
+
+\end{document}
