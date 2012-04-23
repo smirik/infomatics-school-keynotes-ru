@@ -183,8 +183,8 @@ belowcaptionskip=5pt }
   \end{itemize}
   \scriptsize{
   \begin{lstlisting}[language=ruby,basicstyle=\footnotesize,label=ruby3,caption=Использование Хоббита]
-    frodo = Hobbit.new(‘Frodo’, 3, true)
-    samwise = Hobbit.new(‘Samwise’, 2, false)
+    frodo = Hobbit.new("Frodo", 3, true)
+    samwise = Hobbit.new("Samwise", 2, false)
     
     puts frodo.name
     puts samwise.name
@@ -209,8 +209,8 @@ belowcaptionskip=5pt }
   \frametitle{Количество комнат}
   \scriptsize{
   \begin{lstlisting}[language=ruby,basicstyle=\footnotesize,label=ruby4,caption=Количество комнат]
-  frodo   = Hobbit.new(‘Frodo’, 3, true)
-  samwise = Hobbit.new(‘Samwise’, 2, false)
+  frodo   = Hobbit.new("Frodo", 3, true)
+  samwise = Hobbit.new("Samwise", 2, false)
   
   puts frodo.rooms_of(frodo)
   puts frodo.rooms_of(samwise)
@@ -247,6 +247,7 @@ belowcaptionskip=5pt }
   \end{itemize}
 \end{frame}
 
+\section{Статические свойства и методы}
 \subsection{Статические свойства и методы}
 \begin{frame}[fragile]
   \frametitle{Статические свойства и методы}
@@ -261,9 +262,6 @@ belowcaptionskip=5pt }
 \subsection{Пример}
 \begin{frame}[fragile]
   \frametitle{Пример}
-  \begin{itemize}
-    \item 
-  \end{itemize}
   \scriptsize{
   \begin{lstlisting}[language=ruby,basicstyle=\footnotesize,label=ruby6,caption=Пример статического метода]
     class Hobbit
