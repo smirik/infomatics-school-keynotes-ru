@@ -1,0 +1,493 @@
+\documentclass[compress,red]{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage{ucs}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage[russian]{babel}
+\usepackage{graphicx}
+\usepackage{wrapfig}
+
+\usepackage{tikz}
+\usepackage{verbatim}
+
+\usepackage{color}
+\usepackage{xcolor}
+\usepackage{listings}
+
+\usepackage{caption}
+
+\lstset{
+language=ruby,
+extendedchars=\true,
+inputencoding=utf8x,
+commentstyle=\itshape,
+stringstyle=\bf,
+belowcaptionskip=5pt }
+
+
+\DeclareCaptionFont{white}{\color{white}}
+\DeclareCaptionFormat{listing}{\colorbox{gray}{\parbox{\textwidth}{#1#2#3}}}
+\captionsetup[lstlisting]{format=listing,labelfont=white,textfont=white}
+
+\usetikzlibrary{calc,trees,positioning,arrows,chains,shapes.geometric,%
+    decorations.pathreplacing,decorations.pathmorphing,shapes,%
+    matrix,shapes.symbols}
+
+\tikzset{
+>=stealth',
+  punktchain/.style={
+    rectangle, 
+    rounded corners, 
+    % fill=black!10,
+    draw=black, very thick,
+    text width=10em, 
+    minimum height=3em, 
+    text centered, 
+    on chain},
+  line/.style={draw, thick, <-},
+  element/.style={
+    tape,
+    top color=white,
+    bottom color=blue!50!black!60!,
+    minimum width=8em,
+    draw=blue!40!black!90, very thick,
+    text width=10em, 
+    minimum height=1.5em, 
+    text centered, 
+    on chain},
+  every join/.style={->, thick,shorten <=1pt},
+  decoration={brace},
+  tuborg/.style={decorate},
+  tubnode/.style={midway, right=2pt},
+}
+
+\mode<presentation>
+
+\usetheme{Warsaw}
+
+\definecolor{Red}{rgb}{1,0,0}
+\definecolor{Blue}{rgb}{0,0,1}
+\definecolor{Green}{rgb}{0,1,0}
+\definecolor{magenta}{rgb}{1,0,.6}
+\definecolor{lightblue}{rgb}{0,.5,1}
+\definecolor{lightpurple}{rgb}{.6,.4,1}
+\definecolor{gold}{rgb}{.6,.5,0}
+\definecolor{orange}{rgb}{1,0.4,0}
+\definecolor{hotpink}{rgb}{1,0,0.5}
+\definecolor{newcolor2}{rgb}{.5,.3,.5}
+\definecolor{newcolor}{rgb}{0,.3,1}
+\definecolor{newcolor3}{rgb}{1,0,.35}
+\definecolor{darkgreen1}{rgb}{0, .35, 0}
+\definecolor{darkgreen}{rgb}{0, .6, 0}
+\definecolor{darkred}{rgb}{.75,0,0}
+
+\xdefinecolor{olive}{cmyk}{0.64,0,0.95,0.4}
+\xdefinecolor{purpleish}{cmyk}{0.75,0.75,0,0}
+
+\useoutertheme[subsection=false]{smoothbars}
+
+\title{Математическая логика}
+
+%\usecolortheme{dolphin}
+
+
+\begin{document}
+%%титульная страница
+\maketitle
+%% основные моменты
+
+\section{Основные операции}
+
+\subsection{Три базовые операции}
+\begin{frame}[fragile]
+  \frametitle{Три основные логические операции}
+  
+  \begin{tabular}{|l|c|c|l|l|}
+    \hline
+    Название & Обозначение  & Альт. & Соответствие & Знач. \\
+    \hline
+    Конъюнкция & $\&$ & $\wedge$ & умножение & и \\
+    \hline
+    Дизъюнкция & $\vee$ &  & сложение & или \\
+    \hline
+    Отрицание & $\neg$ & \bar{ } & отрицание & не \\
+    \hline
+  \end{tabular}
+  
+  \begin{itemize}
+    \item Полезно запомнить соответствия --- это помогает определить порядок выполнения операций: отрицание, конъюнкция, дизъюнкция.
+  \end{itemize}
+\end{frame}
+
+\subsection{Запомним конъюнкцию}
+\begin{frame}
+  \begin{center}
+    \Huge{$\&$}
+  \end{center}
+\end{frame}
+
+\subsection{Запомним отрицание}
+\begin{frame}
+  \begin{center}
+    \Huge{$\neg$}
+  \end{center}
+\end{frame}
+
+\subsection{Запомним дизъюнкцию}
+\begin{frame}
+  \begin{center}
+    \Huge{$\vee$}
+  \end{center}
+\end{frame}
+
+\subsection{Порядок выполнения 1}
+\begin{frame}
+  \begin{center}
+    \Huge{$A \vee {\neg} B \& C$}
+  \end{center}
+  \begin{center}
+    \Large{Какой порядок выполнения?}
+  \end{center}
+\end{frame}
+
+\subsection{Порядок выполнения 2}
+\begin{frame}
+  \begin{center}
+    \Huge{${\neg} A \& {\neg} B \vee C \& ({\neg} D \vee E)$}
+  \end{center}
+  \begin{center}
+    \Large{Какой порядок выполнения?}
+  \end{center}
+\end{frame}
+
+\section{Таблицы истинности}
+\subsection{Таблицы истинности}
+\begin{frame}
+  \begin{center}
+    \Huge{Таблицы истинности}
+  \end{center}
+\end{frame}
+
+\subsection{Таблица истинности для конъюнкции}
+\begin{frame}[fragile]
+  \frametitle{Таблица истинности для конъюнкции}
+  \begin{itemize}
+    \item Рассмотрим, чему может быть равно высказывание A \& B:
+  \end{itemize}
+  \begin{center}
+    \begin{tabular}{|c|c|c|}
+      \hline
+      A & B & A \& B \\
+      \hline
+      И & И & И \\
+      \hline
+      И & Л & Л \\
+      \hline
+      Л & И & Л \\
+      \hline
+      Л & Л & Л \\
+      \hline
+    \end{tabular}
+  \end{center}
+\end{frame}
+
+\subsection{Таблица истинности для дизъюнкции}
+\begin{frame}[fragile]
+  \frametitle{Таблица истинности для дизъюнкции}
+  \begin{itemize}
+    \item Рассмотрим, чему может быть равно высказывание $A \vee B$:
+  \end{itemize}
+  \begin{center}
+    \begin{tabular}{|c|c|c|}
+      \hline
+      A & B & $A \vee B$ \\
+      \hline
+      И & И & И \\
+      \hline
+      И & Л & И \\
+      \hline
+      Л & И & И \\
+      \hline
+      Л & Л & Л \\
+      \hline
+    \end{tabular}
+  \end{center}
+\end{frame}
+
+\subsection{Таблица истинности для отрицания}
+\begin{frame}[fragile]
+  \frametitle{Таблица истинности для отрицания}
+  \begin{itemize}
+    \item Рассмотрим, чему может быть равно высказывание ${\neg} A$:
+  \end{itemize}
+  \begin{center}
+    \begin{tabular}{|c|c|}
+      \hline
+      A & ${\neg} A$ \\
+      \hline
+      И & Л \\
+      \hline
+      Л & И \\
+      \hline
+    \end{tabular}
+  \end{center}
+\end{frame}
+
+\subsection{Правила запоминания}
+\begin{frame}[fragile]
+  \frametitle{Правила для запоминания / понимания}
+  \begin{itemize}
+    \item Конъюнкция требует, чтобы оба условия были истинны: \textbf{и} то, \textbf{и} другое.
+    \item Дизъюнкции достаточно, чтобы одно из условий выполнялось: \textbf{или} первое, \textbf{или} второе (\textbf{или} оба вместе).
+    \item Отрицание меняет значение на противоположное.
+  \end{itemize}
+\end{frame}
+
+\subsection{Пример построения таблицы истинности}
+\begin{frame}[fragile]
+  \frametitle{Пример построения таблицы истинности}
+  \begin{itemize}
+    \item Построим таблицу истинности для высказывания $A$~\&~$B\vee{\neg}C$.
+    \item Построение заключается в переборе всех возможных вариантов.
+  \end{itemize}
+  \begin{center}
+  \begin{tabular}{|c|c|c|c|}
+    \hline
+    A & B & C & Итог \\
+    \hline
+    И & И & И &  \\
+    \hline
+    И & И & Л &  \\
+    \hline
+    И & Л & И &  \\
+    \hline
+    Л & И & И &  \\
+    \hline
+    И & Л & Л &  \\
+    \hline
+    Л & И & Л &  \\
+    \hline
+    Л & Л & И &  \\
+    \hline
+    Л & Л & Л &  \\
+    \hline
+  \end{tabular}
+  \end{center}
+\end{frame}
+
+\subsection{Пример построения таблицы истинности 2}
+\begin{frame}[fragile]
+  \frametitle{Пример построения таблицы истинности}
+  \begin{itemize}
+    \item Посчитаем первую строку, подставив значения A, B, C:
+    \item $\rm{A}\&\rm{B}\vee{\neg}\rm{C} =$ И$\&$И$\vee{\neg}$И = И$\&$И$\vee$Л = И $\vee$ Л $=$ И
+  \end{itemize}
+  \begin{center}
+  \begin{tabular}{|c|c|c|c|}
+    \hline
+    A & B & C & Итог \\
+    \hline
+    И & И & И & И \\
+    \hline
+    И & И & Л &  \\
+    \hline
+    И & Л & И &  \\
+    \hline
+    Л & И & И &  \\
+    \hline
+    И & Л & Л &  \\
+    \hline
+    Л & И & Л &  \\
+    \hline
+    Л & Л & И &  \\
+    \hline
+    Л & Л & Л &  \\
+    \hline
+  \end{tabular}
+  \end{center}
+\end{frame}
+
+\subsection{Пример построения таблицы истинности 3}
+\begin{frame}[fragile]
+  \frametitle{Пример построения таблицы истинности}
+  \begin{itemize}
+    \item Аналогично рассчитываем для каждой оставшейся строки.
+  \end{itemize}
+  \begin{center}
+  \begin{tabular}{|c|c|c|c|}
+    \hline
+    A & B & C & Итог \\
+    \hline
+    И & И & И & И \\
+    \hline
+    И & И & Л & И \\
+    \hline
+    И & Л & И & Л \\
+    \hline
+    Л & И & И & Л \\
+    \hline
+    И & Л & Л & И \\
+    \hline
+    Л & И & Л & И \\
+    \hline
+    Л & Л & И & Л \\
+    \hline
+    Л & Л & Л & И \\
+    \hline
+  \end{tabular}
+  \end{center}
+\end{frame}
+
+\subsection{Задачи на таблицы истинности}
+\begin{frame}[fragile]
+  \frametitle{Задачи}
+  \begin{itemize}
+    \item Построить таблицу истинности для следующих высказываний:
+      \begin{enumerate}
+        \item A & ${\neg}$ B $\vee$ ${\neg {\neg}}$A
+        \item ${\neg} ($A$\&{\neg}$B$)\&C $
+        \item A & ${\neg}A$
+        \item A $\vee$ ${\neg}A$
+      \end{enumerate}
+  \end{itemize}
+\end{frame}
+
+\section{Законы логики}
+\subsection{Законы логики}
+\begin{frame}
+  \begin{center}
+    \Huge{Законы логики}
+  \end{center}
+\end{frame}
+
+\subsection{Законы логики список}
+\begin{frame}[fragile]
+  \frametitle{Основные законы логики}
+  \begin{itemize}
+    \item Как и в математике, в логике есть свои законы.
+    \item Во многом, они похожи на математические.
+    
+    \begin{tabular}{|l|l|l|}
+      \hline
+      Название & Закон \\
+      \hline
+      Переместительный & A$\&$B~=~B$\&$A \\ 
+                       & A$\vee$B~=~B$\vee$A \\
+      \hline
+      Сочетательный & A$\&$(B$\&$C)~=~A$\&$(B$\&$C) \\
+                    & A$\vee$(B$\vee$C)~=~A$\vee$(B$\vee$C) \\
+      \hline
+      Распределительный & A$\&$(B$\vee$C)~=~(A$\&$B)$\vee$(A$\&$C) \\
+                    & A$\vee$(B$\&$C)~=~(A$\vee$B)$\&$(A$\vee$C) \\
+      \hline
+      Правила де Моргана & ${\neg}$(A$\&$B) = ${\neg}$A$\vee$${\neg}$B \\
+                         & ${\neg}$(A$\vee$B) = ${\neg}$A$\&$${\neg}$B \\
+      \hline
+    \end{tabular}
+  \end{itemize}
+\end{frame}
+
+\subsection{Доказательства}
+\begin{frame}
+  \begin{center}
+    \Large{В логике можно доказывать законы}
+  \end{center}
+  \begin{center}
+    \Huge{Но как?}
+  \end{center}
+\end{frame}
+
+\subsection{Доказательство 2}
+\begin{frame}[fragile]
+  \frametitle{Доказательство правила де Моргана}
+  \begin{itemize}
+    \item В логике два высказывания называются равными, если совпадают их таблицы истинности.
+    \item Для доказательства одного из правил де Моргана построим таблицы истинности для левых и правых частей равенства.
+    \item Если таблицы совпадут, значит, формула верна:
+
+
+    \begin{columns}[c]
+    \column{1.5in}
+      \begin{tabular}{|c|c|c|}
+        \hline
+        A & B & ${\neg}$(A$\&$B) \\
+        \hline
+        И & И & Л \\
+        \hline
+        И & Л & И \\
+        \hline
+        Л & И & И \\
+        \hline
+        Л & Л & И \\
+        \hline
+      \end{tabular}
+    \column{1.5in}
+      \begin{tabular}{|c|c|c|}
+        \hline
+        A & B & ${\neg}$A$\vee$${\neg}$B \\
+        \hline
+        И & И & Л \\
+        \hline
+        И & Л & И \\
+        \hline
+        Л & И & И \\
+        \hline
+        Л & Л & И \\
+        \hline
+      \end{tabular}
+    \end{columns}
+    
+  \end{itemize}
+\end{frame}
+
+\subsection{Задачи по законам}
+\begin{frame}[fragile]
+  \frametitle{Задачи}
+  \begin{itemize}
+    \item Докажите переместительный закон для конъюнкции.
+    \item Докажите распределительный закон конъюнкции относительно дизъюнкции (первый).
+  \end{itemize}
+\end{frame}
+
+\subsection{Малые законы}
+\begin{frame}[fragile]
+  \frametitle{Остальные законы}
+  \begin{center}
+  \begin{tabular}{|l|l|l|}
+    \hline
+    Название & Закон \\
+    \hline
+    Двойного отрицания & ${\neg{\neg}}$A = A \\ 
+    \hline
+    Противоречия & A$\&{\neg}$A = Л \\
+                  & A$\vee{\neg}$A = И \\
+    \hline
+    Повторения & A$\&$A = A \\
+               & A$\vee$A = A \\
+    \hline
+    Просто закон & A$\&$И = A \\
+              & A$\vee$И = И \\
+    \hline
+    Просто закон 2 & A$\&$Л = Л \\
+              & A$\vee$Л = A \\
+    \hline
+  \end{tabular}
+  \end{center}
+\end{frame}
+
+\subsection{Задачи на законы}
+\begin{frame}[fragile]
+  \frametitle{Задачи}
+  \begin{itemize}
+    \item Пример с раскрытием скобок: 
+    \item A$\&{\neg}$(B$\vee$C)~=~A$\&$(${\neg}$B$\&$${\neg}$C)~=~A$\&{\neg}$B$\&$${\neg}$C
+    \item \textbf{Задача.} Раскрыть скобки у следующих выражений:
+      \begin{enumerate}
+        \item ${\neg} ($A$\&{\neg}$B$)\&C $
+        \item ${\neg}$(${\neg} ({\neg}{\neg}$A$\&{\neg}$B$)\&C $)
+      \end{enumerate}
+  \end{itemize}
+\end{frame}
+
+\end{document}
